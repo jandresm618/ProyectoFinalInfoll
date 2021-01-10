@@ -10,14 +10,20 @@ CONFIG += c++11
 
 SOURCES += \
     control_usuario.cpp \
+    escena_juego.cpp \
     main.cpp \
     mainwindow.cpp \
-    movimiento.cpp
+    movimiento.cpp \
+    objeto_grafico.cpp \
+    objeto_movil.cpp
 
 HEADERS += \
     control_usuario.h \
+    escena_juego.h \
     mainwindow.h \
-    movimiento.h
+    movimiento.h \
+    objeto_grafico.h \
+    objeto_movil.h
 
 FORMS += \
     control_usuario.ui \
@@ -27,3 +33,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Imagenes.qrc

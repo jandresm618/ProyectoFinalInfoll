@@ -2,7 +2,7 @@
 #define CONTROL_USUARIO_H
 
 #include <QDialog>
-#include <QPushButton>
+#include <QDesktopWidget>
 #include "mainwindow.h"
 
 namespace Ui {
@@ -23,6 +23,9 @@ private:
     Ui::Control_Usuario *ui;
     MainWindow *gameWindow;
     QPushButton *go2Main;
+    QDesktopWidget *deskWidget;
+
+    int desk_width,desk_height;
 
 };
 

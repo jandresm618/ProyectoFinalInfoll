@@ -1,73 +1,64 @@
 #ifndef MOVIMIENTO_H
 #define MOVIMIENTO_H
-
-
-//#define DT 0.1
-
-#include <QPoint>
-#include <QDebug>
+#include <iostream>
 #include <math.h>
-#include <time.h>
-#include <stdlib.h>
+#include <vector>
+#include <map>
+#include <QDebug>
+
+#define G 9.81
+#define DT 0.1
+#define pi 3.141617
+
+
+using namespace std;
+
 
 class Movimiento
 {
 public:
-    //CONSTRUCTORES
     Movimiento();
-    Movimiento(bool opc, int x, int y, int xf, int yf, float dt); //1->Rectilineo, 0->Parabolico con destino
-    Movimiento(int x, int y);
-    Movimiento(int x, float dt);
-    Movimiento(int tipo, bool direccion); //Constructor con el tipo y la direccion del movimiento
+    Movimiento(float x,float y,int xf,int yf);
+    bool actualizar(float dt);
+    bool nParabolicos(float xf,float yf, float d, float factorImpacto);
+    bool parabolico(float xf,float yf,int _v0,int _angle,float d, float factorImpacto);
+    vector<float> parabolico(float timeStop,float x, float y,int _v0,int _angle);
 
-    void setPosicion(float _x, float _y);   // METODOS SET
-    void setVelocidad(float _x, float _y);
-    void setRandomVel();
-    void setAceleracion(float _x, float _y);
-    void setHigh(float value);
-    void setWidth(float value);
+    float tiempoParabolico(float xf,float yf,float _angle,float _v0,float d, float factorImpacto);
+    void setParametros(int cont);
+    map<int,vector<float>> getParametros();
+    vector<float> getBest(int param,bool minMax);
+    void imprimirValoresImpacto();
+    void imprimirVector(vector<float> vec);
 
-
-    QPoint *getPosicion();                  //METODOS GET
-    QPoint *getVelocidad();
-    QPoint *getAceleracion();
-    float getHigh() const;
-    float getWidth() const;
-
-
-    void actualizar(float dt);              //METODO QUE ACTUALIZA LA VELOCIDAD Y LA POCISION EN EL INTERVALO DT
-
-    //TIPOS DE MOVIMIENTO
-
-    void movParabolico();
-    void movParabolico(int x, int y);
-
-    void movRectilineo();
-    void movRectilineo(int x, int y);
-
-    void caidaLibre(int x);
-
-
+    int getPosBestMove(int param,bool minMax);
 
     float getX() const;
-    void setX(float value);
 
     float getY() const;
-    void setY(float value);
+
+    void setParamsMove(float v0,float angle);
 
 private:
-    float h,w;       //alto y ancho
-    float x;
-    float y;
-    float vx;
-    float vy;               //Atributos Fisicos del movimiento
-    float ax;
-    float ay;
+    bool lado; //Indicador de bando
+                //false = Defensivo
+                //true = Ofensivo
 
-    float DT;
-    void calculaPosicion(float dt);         //METODO DE ECUACION CINEMATICA DE POSICION
-    void calculaVelocidad(float dt);        //METODO DE ECUACION CINEMATICA DE VELOCIDAD
-    void calculaVelInicial (float xf, float yf, float dt);                   //METODO QUE CALCULA EL ANGULO
+    float ymax = 0; //Variable Auxiliar
+    float x = 0,y = 0;
+    float px= 0,py= 0;
+    int pfx, pfy;
+    float vx= 0,vy= 0;
+    float ax= 0,ay= 0;
+    float v0= 0;
+    float v0x= 0,v0y= 0;
+    float angulo= 0;
+    float time= 0;
+    float aux_v= 0,aux_sin= 0;
+    vector<float> parametrosLanzamiento;
+    map<int,vector<float>> lanzamientos;
+    map<int,vector<float>>::iterator it;
+
 };
 
 #endif // MOVIMIENTO_H
