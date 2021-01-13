@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QGraphicsView>
 #include <QDebug>
+#include <QPoint>
 #include "escena_juego.h"
 
 
