@@ -3,6 +3,11 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QGraphicsView>
+#include <QDebug>
+#include "escena_juego.h"
+
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,11 +22,23 @@ public:
     ~MainWindow();
 
     void comeBack();
-    //void setControl(Control_Usuario *_control = nullptr);
+    void moveObject();
+    void setDeskProperty(int w,int h);
+
+    void addObjetoGrafico(QString ruta,int x,int y, int w, int h);
+    void addObjetoMovil();
+    void add();
 
 private:
     Ui::MainWindow *ui;
     QPushButton *boton;
+    QPushButton *boton2;
+    QPushButton *boton3;
+    QGraphicsView *view;
+
+    Escena_Juego *scene;
+
+    int desk_widht,desk_height;
 
 };
 #endif // MAINWINDOW_H
