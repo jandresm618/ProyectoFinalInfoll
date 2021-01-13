@@ -9,6 +9,7 @@
 #include <math.h>
 #include <time.h>
 #include <stdlib.h>
+#include <QPointer>
 
 class Movimiento
 {
