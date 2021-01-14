@@ -25,6 +25,7 @@ bool Movimiento::actualizar(float dt)
     x = x + vx*dt;                  //Nueva Posicion x
     y = y + vy*dt-(0.5*ay*dt*dt);   //Nueva Posicion y
     //cout<<x<<" "<<y<<endl;
+    qDebug()<<x<<" "<<y;
 
     ///SI SE CUMPLE LA CONDICION
     if(lado) {if(x >= pfx) outScene = true;}    //Comprobando que el objeto siga en escena

@@ -29,16 +29,24 @@ public:
     void addObjetoMovil();
     void add();
 
+    void imagen1();
+    void imagen2();
+
 private:
     Ui::MainWindow *ui;
     QPushButton *boton;
     QPushButton *boton2;
     QPushButton *boton3;
+    QPushButton *boton4;
+    QPushButton *boton5;
     QGraphicsView *view;
+
+    QTimer *time;
 
     Escena_Juego *scene;
 
     int desk_widht,desk_height;
+    bool img = true;
 
 };
 #endif // MAINWINDOW_H

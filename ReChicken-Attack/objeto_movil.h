@@ -34,6 +34,8 @@ private:
     int v0 = 0, angle = 0; //Variables de Movimiento
     float factorImpacto = 0.05; //Porcentaje de Error en el impacto
 
+signals:
+    void outScene();
 };
 
 #endif // OBJETO_MOVIL_H

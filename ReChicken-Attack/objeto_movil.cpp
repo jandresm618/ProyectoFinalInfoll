@@ -75,9 +75,9 @@ void Objeto_Movil::stopMove()
 
 void Objeto_Movil::updatePos()
 {
+    ///SI SE CUMPLE LA CONDICION
+    if (movimiento->actualizar(0.1)) emit outScene();       //EMITE SEÑAL
     ///ASIGNACION DE VALORES
-
-    if (movimiento->actualizar(0.1)) qDebug()<<"Eliminando de escena";
     this->set_Pos(movimiento->getX(),movimiento->getY());
 }
 
