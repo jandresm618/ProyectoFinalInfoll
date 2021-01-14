@@ -6,6 +6,8 @@
 #include <QGraphicsView>
 #include <QDebug>
 #include <QPoint>
+#include <QTimer>
+#include <QTime>
 #include "escena_juego.h"
 
 
@@ -29,6 +31,13 @@ public:
     void addObjetoGrafico(QString ruta,int x,int y, int w, int h);
     void addObjetoMovil();
     void add();
+    void Cambiofondo();
+    void actualizarcronometro();
+    void Estado();
+
+    QTimer *timer=new QTimer();
+    QTime time;
+    int cont=1;
 
 private:
     Ui::MainWindow *ui;

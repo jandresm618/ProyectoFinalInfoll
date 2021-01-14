@@ -13,7 +13,9 @@ MainWindow::MainWindow(QWidget *parent)
     scene = new Escena_Juego();
 
     view->setScene(scene);
-    view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));    
+    //view->setBackgroundBrush(QImage(":/personajes/imagenes/fondo.png"));
+
+    //view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
     this->showMaximized();
 
 
@@ -30,6 +32,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(boton,&QPushButton::clicked,this,&MainWindow::comeBack);
     connect(boton2,&QPushButton::clicked,this,&MainWindow::moveObject);
     connect(boton3,&QPushButton::clicked,this,&MainWindow::addObjetoMovil);
+
+    connect(timer, &QTimer::timeout, this, &MainWindow::Cambiofondo);
+    timer->start(1000);
 }
 
 ///         DESTRUCTOR         ///
@@ -82,4 +87,13 @@ void MainWindow::add()
     scene->addObjetoGrafico(ruta,x,y,w,h);
 }
 
+void MainWindow::Cambiofondo()
+{
+    //view->setBackgroundBrush(QImage(":/personajes/imagenes/fondo.png"));
+
+    if (cont == 1) {view->setBackgroundBrush(QImage(":/personajes/imagenes/fondo.png"));cont=2;}
+    else if (cont == 2) {view->setBackgroundBrush(QImage(":/personajes/imagenes/EXIT.png"));cont=3;}
+    else if (cont == 3) {view->setBackgroundBrush(QImage(":/personajes/imagenes/CANCEL.png"));cont=1;}
+
+}
 
