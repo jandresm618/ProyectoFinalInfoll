@@ -58,6 +58,7 @@ bool Movimiento::nParabolicos(float xf, float yf, float d, float factorImpacto)
             }
             if(cont == 3) break;
         }
+        if(cont == 3) break;
         if(lado){                                       //De izquierda a derecha
                             //Condicion Relativa De Fin de la Funcion
             v0_+=5;
