@@ -36,6 +36,8 @@ public:
     void addObjetoGrafico(QString ruta,int x,int y, int w, int h);
     void addObjetoMovil();
 
+
+
     /// FUNCIONES DE PRUEBA
     void add();
     void imagen1();
@@ -60,8 +62,9 @@ private:
     int desk_widht,desk_height;
     bool img = true;
 
+    bool serial_available = false;
     char serial_char;
-    QString serial_port = "/dev/ttyACM0";
+    string serial_port = "/dev/ttyUSB0";
 
 };
 #endif // MAINWINDOW_H

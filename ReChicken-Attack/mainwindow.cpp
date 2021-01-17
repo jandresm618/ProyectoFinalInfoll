@@ -4,11 +4,12 @@
 
 ///         CONSTRUCTOR         ///
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
     ///ASIGNACION DE VALORES
     ui->setupUi(this);
+
 
 
     ///DECLARACION DE OBJETOS
@@ -47,9 +48,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(boton3,&QPushButton::clicked,this,&MainWindow::addObjetoMovil);
     connect(boton4,&QPushButton::clicked,this,&MainWindow::imagen1);
     connect(boton5,&QPushButton::clicked,this,&MainWindow::imagen2);
-    connect(time,&QTimer::timeout,this,&MainWindow::imagen2);
+    connect(time,&QTimer::timeout,this,&MainWindow::serialRead);
 
-    time->start(1000);
+
+
+    serialInit();
+    time->start(500);
 }
 
 ///         DESTRUCTOR         ///
@@ -70,7 +74,7 @@ MainWindow::~MainWindow()
 /// INICIALIZACION DEL PUERTO SERIE     ///
 void MainWindow::serialInit()
 {
-    serial.setPortName(serial_port); //Poner el nombre del puerto
+    serial.setPortName("/dev/ttyUSB0"); //Poner el nombre del puerto
 
     qDebug()<<"Serial init"<<"++++++++++++++++++++";
 
@@ -92,18 +96,21 @@ void MainWindow::serialInit()
             qDebug()<<serial.errorString();
 
         qDebug()<<"Serial ok";
-    }else{
+        serial_available = true;
+    }else{        
         qDebug()<<"Serial ttyACM0 not opened. Error: "<<serial.errorString();
     }
+
 }
 
 ///      LECTURA DEL PUERTO SERIE       ///
 void MainWindow::serialRead(){
-
-
-    serial.read(&serial_char,1); //Leer toda la línea que envía arduino
-    if(serial_char!=0){
-        cout<<serial_char<<"************+"<<endl;
+    scene->deleteFromScene();
+    if(serial_available){
+        serial.read(&serial_char,1); //Leer toda la línea que envía arduino
+        if(serial_char!=0){
+            cout<<serial_char<<"************+"<<endl;
+        }
     }
 }
 
@@ -146,6 +153,7 @@ void MainWindow::addObjetoMovil()
     int xf = 900,yf = 500;
     scene->addObjetoMovil(ruta,x,y,xf,yf,w,h);
 }
+
 
 
 ///     FUNCIONES DE PRUEBA     ///

@@ -25,6 +25,9 @@ public:
     void updatePos();
 
 
+    bool getOutOfScene() const;
+    void deleteObject();
+
 private:
     Movimiento *movimiento;
 
@@ -33,6 +36,7 @@ private:
 
     int v0 = 0, angle = 0; //Variables de Movimiento
     float factorImpacto = 0.05; //Porcentaje de Error en el impacto
+    bool outOfScene = false;
 
 signals:
     void outScene();

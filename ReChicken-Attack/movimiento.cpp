@@ -25,7 +25,7 @@ bool Movimiento::actualizar(float dt)
     x = x + vx*dt;                  //Nueva Posicion x
     y = y + vy*dt-(0.5*ay*dt*dt);   //Nueva Posicion y
     //cout<<x<<" "<<y<<endl;
-    qDebug()<<x<<" "<<y;
+    //qDebug()<<"Posicion: "<<x<<", "<<y;
 
     ///SI SE CUMPLE LA CONDICION
     if(lado) {if(x >= pfx) outScene = true;}    //Comprobando que el objeto siga en escena
@@ -56,9 +56,9 @@ bool Movimiento::nParabolicos(float xf, float yf, float d, float factorImpacto)
                 setParametros(cont);
                 imprimirValoresImpacto(); impacto = true; cont++; break;
             }
-            if(cont == 3) break;
+            if(cont == 1) break;
         }
-        if(cont == 3) break;
+        if(cont == 1) break;
         if(lado){                                       //De izquierda a derecha
                             //Condicion Relativa De Fin de la Funcion
             v0_+=5;
