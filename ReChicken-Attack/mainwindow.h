@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
 #include <QPushButton>
 #include <QGraphicsView>
 #include <QDebug>
@@ -21,19 +23,31 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void comeBack();
-    void moveObject();
+    /// FUNCIONES DE PUERTO SERIAL
+    void serialInit();
+    void serialRead();
+
+    /// CARACTERISTICAS DE PANTALLA
     void setDeskProperty(int w,int h);
 
+    /// SLOTS DE BOTONES
+    void comeBack();
+    void moveObject();
     void addObjetoGrafico(QString ruta,int x,int y, int w, int h);
     void addObjetoMovil();
-    void add();
 
+
+
+    /// FUNCIONES DE PRUEBA
+    void add();
     void imagen1();
     void imagen2();
 
 private:
     Ui::MainWindow *ui;
+    /// OBJETO SERIAL
+    QSerialPort serial;
+
     QPushButton *boton;
     QPushButton *boton2;
     QPushButton *boton3;
@@ -47,6 +61,10 @@ private:
 
     int desk_widht,desk_height;
     bool img = true;
+
+    bool serial_available = false;
+    char serial_char;
+    string serial_port = "/dev/ttyUSB0";
 
 };
 #endif // MAINWINDOW_H

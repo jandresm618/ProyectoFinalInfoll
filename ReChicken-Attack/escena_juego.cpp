@@ -36,8 +36,12 @@ void Escena_Juego::addObjetoMovil(QString ruta, int x, int y,int xf,int yf, int 
 
     ///ASIGNACION DE VALORES
     muni = new Objeto_Movil(ruta,x,y,limit_x,limit_y,w,h);
+    objetosMoviles.push_back(muni);
+    qDebug()<<"Get Parametros";
     muni->getVel(xf,yf,param,minMax);
+    qDebug()<<"Añadiendo a la escena";
     this->addItem(muni);
+    qDebug()<<"Empezando el movimiento";
     muni->startMove(50);
 }
 
@@ -45,4 +49,20 @@ void Escena_Juego::doSome()
 {
     ///ASIGNACION DE VALORES
     personaje->set_Pos(personaje->getX()+50,personaje->getY());
+}
+
+void Escena_Juego::deleteFromScene()
+{
+    int cont = 0;
+    if(!objetosMoviles.empty()){
+        for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++,cont++){
+            if((*itObjMov)->getOutOfScene()){
+                qDebug()<<"Fuera de Escena, Eliminando "<<cont;
+                (*itObjMov)->deleteObject();
+                objetosMoviles.erase(itObjMov);
+                break;
+            }
+        }
+    }
+
 }

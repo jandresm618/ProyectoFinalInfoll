@@ -76,8 +76,18 @@ void Objeto_Movil::stopMove()
 void Objeto_Movil::updatePos()
 {
     ///SI SE CUMPLE LA CONDICION
-    if (movimiento->actualizar(0.1)) emit outScene();       //EMITE SEÑAL
+    if (movimiento->actualizar(0.1)) {emit outScene(); outOfScene = true; /*delete this;*/}       //EMITE SEÑAL
     ///ASIGNACION DE VALORES
     this->set_Pos(movimiento->getX(),movimiento->getY());
+}
+
+bool Objeto_Movil::getOutOfScene() const
+{
+    return outOfScene;
+}
+
+void Objeto_Movil::deleteObject()
+{
+    delete this;
 }
 

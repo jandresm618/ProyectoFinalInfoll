@@ -4,11 +4,12 @@
 
 ///         CONSTRUCTOR         ///
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
     ///ASIGNACION DE VALORES
     ui->setupUi(this);
+
 
 
     ///DECLARACION DE OBJETOS
@@ -47,9 +48,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(boton3,&QPushButton::clicked,this,&MainWindow::addObjetoMovil);
     connect(boton4,&QPushButton::clicked,this,&MainWindow::imagen1);
     connect(boton5,&QPushButton::clicked,this,&MainWindow::imagen2);
-    connect(time,&QTimer::timeout,this,&MainWindow::imagen2);
+    connect(time,&QTimer::timeout,this,&MainWindow::serialRead);
 
-    time->start(1000);
+
+
+    serialInit();
+    time->start(500);
 }
 
 ///         DESTRUCTOR         ///
@@ -58,10 +62,58 @@ MainWindow::~MainWindow()
     ///ELIMINACION DE MEMORIA
     delete boton;
     delete boton2;
+    delete boton3;
+    delete boton4;
+    delete boton5;
+    delete time;
     delete view;
     delete scene;
     delete ui;
 }
+
+/// INICIALIZACION DEL PUERTO SERIE     ///
+void MainWindow::serialInit()
+{
+    serial.setPortName("/dev/ttyUSB0"); //Poner el nombre del puerto
+
+    qDebug()<<"Serial init"<<"++++++++++++++++++++";
+
+    if(serial.open(QIODevice::ReadWrite)){
+        //Ahora el puerto seria está abierto
+        if(!serial.setBaudRate(QSerialPort::Baud9600)) //Configurar la tasa de baudios
+            qDebug()<<serial.errorString();
+
+        if(!serial.setDataBits(QSerialPort::Data8))
+            qDebug()<<serial.errorString();
+
+        if(!serial.setParity(QSerialPort::NoParity))
+            qDebug()<<serial.errorString();
+
+        if(!serial.setStopBits(QSerialPort::OneStop))
+            qDebug()<<serial.errorString();
+
+        if(!serial.setFlowControl(QSerialPort::NoFlowControl))
+            qDebug()<<serial.errorString();
+
+        qDebug()<<"Serial ok";
+        serial_available = true;
+    }else{        
+        qDebug()<<"Serial ttyACM0 not opened. Error: "<<serial.errorString();
+    }
+
+}
+
+///      LECTURA DEL PUERTO SERIE       ///
+void MainWindow::serialRead(){
+    scene->deleteFromScene();
+    if(serial_available){
+        serial.read(&serial_char,1); //Leer toda la línea que envía arduino
+        if(serial_char!=0){
+            cout<<serial_char<<"************+"<<endl;
+        }
+    }
+}
+
 
 ///     FUNCION RETORNO AL MENU     ///
 void MainWindow::comeBack()
@@ -102,6 +154,9 @@ void MainWindow::addObjetoMovil()
     scene->addObjetoMovil(ruta,x,y,xf,yf,w,h);
 }
 
+
+
+///     FUNCIONES DE PRUEBA     ///
 void MainWindow::add()
 {
     ///DECLARACION DE OBJETOS
