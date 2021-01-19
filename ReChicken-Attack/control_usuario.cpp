@@ -36,12 +36,16 @@ Control_Usuario::~Control_Usuario()
 ///     FUNCION INICIAR JUEGO       ///
 void Control_Usuario::showMainWindow()
 {
-    ///DECLARACION DE OBJETO
-    gameWindow = new MainWindow(this);
+    if(firstTime){
+        ///DECLARACION DE OBJETO
+        gameWindow = new MainWindow(this);
 
-    ///ASIGNACION DE VALORES
-    gameWindow->setDeskProperty(desk_width,desk_height);
+        ///ASIGNACION DE VALORES
+        gameWindow->setDeskProperty(desk_width,desk_height);
+        gameWindow->addObjetoGrafico(":/personajes/imagenes/bullet.png",250,300,100,100);
+        firstTime = false;
+    }
+
     gameWindow->show();
-    gameWindow->addObjetoGrafico(":/personajes/imagenes/bullet.png",250,300,100,100);
     this->hide();
 }

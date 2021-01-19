@@ -8,11 +8,14 @@ Objeto_Movil::Objeto_Movil()
 Objeto_Movil::Objeto_Movil(QString _ruta, int _x, int _y,int _xf,int _yf, int _w, int _h) : Objeto_Grafico(_ruta,_x,_y,_w,_h)
 {
     ///DECLARACION DE OBJETOS
-    movimiento = new Movimiento(_x,_y,_xf,_yf); //De derecha a Izquierda
+    movimiento = new Movimiento(_x,_y,_xf,_yf);
     time_move = new QTimer;
 
     ///CONEXION DE SIGNAL & SLOT
+        ///Movimiento Parabolico
     connect(time_move,&QTimer::timeout,this,&Objeto_Movil::updatePos);
+        ///Movimiento Senoidal
+    //connect(time_move,&QTimer::timeout,this,&Objeto_Movil::updatePos2);
 }
 
 Objeto_Movil::~Objeto_Movil()
@@ -34,7 +37,7 @@ void Objeto_Movil::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->drawPixmap(boundingRect(),*(this->getImage()),this->getImage()->rect());
 }
 
-void Objeto_Movil::getVel(int xf, int yf,int param,bool minMax)
+void Objeto_Movil::setMovParabolico(int xf, int yf,int param,bool minMax)
 {
     ///DECLARACION DE VARIABLES AUXILIARES LOCALES
     vector<float> params;                                //Vector de Parametros de Lanzamiento
@@ -61,6 +64,11 @@ void Objeto_Movil::setVel(float _v0, float _angle)
     movimiento->setParamsMove(v0,angle);
 }
 
+void Objeto_Movil::setMovSenoidal()
+{
+    movimiento->setMovSeno();
+}
+
 void Objeto_Movil::startMove(int msec)
 {
     ///ASIGNACION DE VALORES
@@ -78,6 +86,12 @@ void Objeto_Movil::updatePos()
     ///SI SE CUMPLE LA CONDICION
     if (movimiento->actualizar(0.1)) {emit outScene(); outOfScene = true; /*delete this;*/}       //EMITE SEÑAL
     ///ASIGNACION DE VALORES
+    this->set_Pos(movimiento->getX(),movimiento->getY());
+}
+
+void Objeto_Movil::updatePos2()
+{
+    movimiento->actualizarSeno();
     this->set_Pos(movimiento->getX(),movimiento->getY());
 }
 

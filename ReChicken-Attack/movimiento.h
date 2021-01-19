@@ -17,27 +17,40 @@ using namespace std;
 class Movimiento
 {
 public:
+    /// CONSTRUCTORES
     Movimiento();
     Movimiento(float x,float y,int xf,int yf);
-    bool actualizar(float dt);
+
+
+    /// MOVIMIENTO SENOIDAL
+    void setMovSeno();
+    void actualizarSeno();
+
+    /// MOVIMIENTO RECTILINEO ACELERADO
+
+    /// MOVIMIENTO PARABOLICO
     bool nParabolicos(float xf,float yf, float d, float factorImpacto);
     bool parabolico(float xf,float yf,int _v0,int _angle,float d, float factorImpacto);
-    vector<float> parabolico(float timeStop,float x, float y,int _v0,int _angle);
-
+    vector<float> parabolico(float timeStop,float x, float y,int _v0,int _angle);    
     float tiempoParabolico(float xf,float yf,float _angle,float _v0,float d, float factorImpacto);
+    /// ACTUALIZACION DE VALORES
+    bool actualizar(float dt);
+
+    /// METODOS SET
     void setParametros(int cont);
+    void setParamsMove(float v0,float angle);
+
+
+    /// METODOS GET
     map<int,vector<float>> getParametros();
     vector<float> getBest(int param,bool minMax);
-    void imprimirValoresImpacto();
-    void imprimirVector(vector<float> vec);
-
     int getPosBestMove(int param,bool minMax);
-
     float getX() const;
-
     float getY() const;
 
-    void setParamsMove(float v0,float angle);
+    /// IMPRESION DE VALORES
+    void imprimirValoresImpacto();
+    void imprimirVector(vector<float> vec);
 
 private:
     bool lado; //Indicador de bando
@@ -55,6 +68,9 @@ private:
     float angulo= 0;
     float time= 0;
     float aux_v= 0,aux_sin= 0;
+
+    float t = 0;
+
     vector<float> parametrosLanzamiento;
     map<int,vector<float>> lanzamientos;
     map<int,vector<float>>::iterator it;

@@ -27,6 +27,8 @@ private:
 
     int desk_width,desk_height;
 
+    bool firstTime = true;
+
 };
 
 #endif // CONTROL_USUARIO_H

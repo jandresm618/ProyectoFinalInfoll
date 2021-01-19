@@ -18,11 +18,15 @@ public:
     virtual QRectF boundingRect() const;
     virtual void paint(QPainter *painter,const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-    void getVel(int xf,int yf,int param,bool minMax);
+    void setMovParabolico(int xf,int yf,int param,bool minMax);
     void setVel(float _v0,float _angle);
+    void setMovSenoidal();
+
+
     void startMove(int msec);
     void stopMove();
     void updatePos();
+    void updatePos2();
 
 
     bool getOutOfScene() const;

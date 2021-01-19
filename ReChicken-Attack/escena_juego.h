@@ -16,6 +16,8 @@ public:
 
     void setWindowProperty(int desk_w, int desk_h);
 
+    void arcadeDesing();
+
     void addObjetoGrafico(QString ruta,int x,int y,int w,int h);
     void addObjetoMovil(QString ruta,int x,int y,int xf,int yf,int w,int h);
     void doSome();
