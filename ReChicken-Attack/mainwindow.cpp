@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(boton3,&QPushButton::clicked,this,&MainWindow::addObjetoMovil);
 
     connect(timer, &QTimer::timeout, this, &MainWindow::Cambiofondo);
-    timer->start(1000);
+    timer->start(200);
 }
 
 ///         DESTRUCTOR         ///
@@ -91,9 +91,9 @@ void MainWindow::Cambiofondo()
 {
     //view->setBackgroundBrush(QImage(":/personajes/imagenes/fondo.png"));
 
-    if (cont == 1) {view->setBackgroundBrush(QImage(":/personajes/imagenes/fondo.png"));cont=2;}
-    else if (cont == 2) {view->setBackgroundBrush(QImage(":/personajes/imagenes/EXIT.png"));cont=3;}
-    else if (cont == 3) {view->setBackgroundBrush(QImage(":/personajes/imagenes/CANCEL.png"));cont=1;}
-
+    if (cont == 1) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original1.png"));cont=2;}
+    else if (cont == 2) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original22.png"));cont=3;}
+    else if (cont == 3) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original33.png"));cont=1;}
+    //else if (cont == 4) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original22.png"));cont=1;}
 }
 

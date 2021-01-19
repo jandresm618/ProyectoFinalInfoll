@@ -56,5 +56,8 @@
         <file>imagenes/swamp.png</file>
         <file>imagenes/user.png</file>
         <file>imagenes/USER.png</file>
+        <file>imagenes/Fondo_Original1.png</file>
+        <file>imagenes/Fondo_Original22.png</file>
+        <file>imagenes/Fondo_Original33.png</file>
     </qresource>
 </RCC>
