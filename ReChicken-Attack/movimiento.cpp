@@ -12,6 +12,33 @@ Movimiento::Movimiento(float x,float y,int xf,int yf): px(x),py(y),pfx(xf),pfy(y
     else lado = false;              //Movimiento de derecha a izquierda
 }
 
+void Movimiento::actualizarMUA()
+{
+    float v = 10;
+    float A = 30;
+    float freq = 1/2;
+    x = x + v*t;
+    y = y + A*sin(2*3.1416*freq*t);
+    qDebug()<<x<<" , "<<t;
+    t = t +0.01;
+}
+
+void Movimiento::setMovSeno()
+{
+    x = px; y = py;
+}
+
+void Movimiento::actualizarSeno()
+{
+    float v = 10;
+    float A = 30;
+    float freq = 1/2;
+    x = x + v;
+    y = y + A*sin(/*2*3.1416*freq**/t);
+    qDebug()<<x<<" , "<<sin(2*3.1416*freq*x);
+    t = t +0.4;
+}
+
 bool Movimiento::actualizar(float dt)
 {
     ///DECLARACION DE VARIABLES AUXILIARES LOCALES
@@ -24,7 +51,7 @@ bool Movimiento::actualizar(float dt)
     vy = vy - ay*dt;                //Velocidad en Componente y
     x = x + vx*dt;                  //Nueva Posicion x
     y = y + vy*dt-(0.5*ay*dt*dt);   //Nueva Posicion y
-    //cout<<x<<" "<<y<<endl;
+
     //qDebug()<<"Posicion: "<<x<<", "<<y;
 
     ///SI SE CUMPLE LA CONDICION

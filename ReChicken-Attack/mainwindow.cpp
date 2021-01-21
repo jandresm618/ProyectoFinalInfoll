@@ -18,36 +18,36 @@ MainWindow::MainWindow(QWidget *parent)
     scene = new Escena_Juego();
         ///BOTONES
     boton = new QPushButton(QString("COME BACK"));
-    boton2 = new QPushButton(QString("MOVE"));
-    boton3 = new QPushButton(QString("ADD"));
-    boton4 = new QPushButton(QString("Imagen"));
-    boton5 = new QPushButton(QString("FONDO NEGRO"));
+    boton2 = new QPushButton(QString("ADD 1"));
+    boton3 = new QPushButton(QString("ADD 2"));
+    boton4 = new QPushButton(QString("ADD 3"));
+    //boton5 = new QPushButton(QString("FONDO NEGRO"));
 
     time = new QTimer;
 
     ///ASIGNACION DE VALORES
         ///VISUALIZACION Y ESCENA
     view->setScene(scene);
-    view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));    
+    //view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
     this->showMaximized();
         ///BOTONES
-    boton->setGeometry(100,100,100,80);
-    boton2->setGeometry(300,100,100,80);
-    boton3->setGeometry(600,100,100,80);
-    boton4->setGeometry(750,100,100,80);
-    boton5->setGeometry(600,300,100,80);
+    boton->setGeometry(100,50,100,80);
+    boton2->setGeometry(100,150,100,80);
+    boton3->setGeometry(300,150,100,80);
+    boton4->setGeometry(600,150,100,80);
+    //boton5->setGeometry(600,300,100,80);
     scene->addWidget(boton);
     scene->addWidget(boton2);
     scene->addWidget(boton3);
     scene->addWidget(boton4);
-    scene->addWidget(boton5);
+    //scene->addWidget(boton5);
 
     ///CONEXION DE SIGNALS & SLOTS
     connect(boton,&QPushButton::clicked,this,&MainWindow::comeBack);
-    connect(boton2,&QPushButton::clicked,this,&MainWindow::moveObject);
-    connect(boton3,&QPushButton::clicked,this,&MainWindow::addObjetoMovil);
-    connect(boton4,&QPushButton::clicked,this,&MainWindow::imagen1);
-    connect(boton5,&QPushButton::clicked,this,&MainWindow::imagen2);
+    connect(boton2,&QPushButton::clicked,this,&MainWindow::addObjetoMovil1);
+    connect(boton3,&QPushButton::clicked,this,&MainWindow::addObjetoMovil2);
+    connect(boton4,&QPushButton::clicked,this,&MainWindow::addObjetoMovil3);
+    //connect(boton5,&QPushButton::clicked,this,&MainWindow::imagen2);
     connect(time,&QTimer::timeout,this,&MainWindow::serialRead);
 
 
@@ -146,12 +146,31 @@ void MainWindow::addObjetoGrafico(QString ruta, int x, int y, int w, int h)
     scene->addObjetoGrafico(ruta,x,y,w,h);
 }
 
-void MainWindow::addObjetoMovil()
+void MainWindow::addObjetoMovil1()
 {
     ///DECLARACION DE OBJETOS
-    QString ruta = ":/personajes/imagenes/GIFT.png"; int x=0; int y=500; int w=80; int h=80;
+    QString ruta = ":/personajes/imagenes/GIFT.png";int w=80; int h=80;
     int xf = 900,yf = 500;
-    scene->addObjetoMovil(ruta,x,y,xf,yf,w,h);
+    int move = 1;
+    scene->addObjetoMovil(ruta,x_sir,y_sir,xf,yf,w,h,move);
+}
+
+void MainWindow::addObjetoMovil2()
+{
+    ///DECLARACION DE OBJETOS
+    QString ruta = ":/personajes/imagenes/GIFT.png"; int w=80; int h=80;
+    int xf = 900,yf = 500;
+    int move = 2;
+    scene->addObjetoMovil(ruta,x_sir,y_sir,xf,yf,w,h,move);
+}
+
+void MainWindow::addObjetoMovil3()
+{
+    ///DECLARACION DE OBJETOS
+    QString ruta = ":/personajes/imagenes/GIFT.png"; int w=80; int h=80;
+    int xf = 900,yf = 500;
+    int move = 3;
+    scene->addObjetoMovil(ruta,x_sir,y_sir,xf,yf,w,h,move);
 }
 
 
@@ -173,6 +192,11 @@ void MainWindow::imagen2()
 {
     if (img) {view->setBackgroundBrush(QImage(":/personajes/imagenes/fondo.png")); img = false;}
     else {view->setBackgroundBrush(QImage(":/personajes/imagenes/GIFT.png")); img = true;}
+}
+
+void MainWindow::setPosSir(int x, int y)
+{
+    x_sir = x; y_sir = y;
 }
 
 

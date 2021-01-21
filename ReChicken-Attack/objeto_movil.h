@@ -11,18 +11,23 @@ class Objeto_Movil:public QObject, public Objeto_Grafico
     Q_OBJECT
 public:
     Objeto_Movil();
-    Objeto_Movil(QString _ruta,int _x,int _y,int _xf,int _yf,int _w,int _h);
+    Objeto_Movil(QString _ruta,int _x,int _y,int _xf,int _yf,int _w,int _h,int move);
     ~Objeto_Movil();
 
     //PROPIEDADES DE VISUALIZACION
     virtual QRectF boundingRect() const;
     virtual void paint(QPainter *painter,const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-    void getVel(int xf,int yf,int param,bool minMax);
+    void setMovParabolico(int xf,int yf,int param,bool minMax);
     void setVel(float _v0,float _angle);
+    void setMovSenoidal();
+
+
     void startMove(int msec);
     void stopMove();
     void updatePos();
+    void updatePos2();
+    void updatePos3();
 
 
     bool getOutOfScene() const;
