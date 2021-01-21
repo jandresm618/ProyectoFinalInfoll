@@ -5,17 +5,34 @@ Objeto_Movil::Objeto_Movil()
 
 }
 
-Objeto_Movil::Objeto_Movil(QString _ruta, int _x, int _y,int _xf,int _yf, int _w, int _h) : Objeto_Grafico(_ruta,_x,_y,_w,_h)
+Objeto_Movil::Objeto_Movil(QString _ruta, int _x, int _y,int _xf,int _yf, int _w, int _h,int move) : Objeto_Grafico(_ruta,_x,_y,_w,_h)
 {
     ///DECLARACION DE OBJETOS
     movimiento = new Movimiento(_x,_y,_xf,_yf);
     time_move = new QTimer;
 
     ///CONEXION DE SIGNAL & SLOT
-        ///Movimiento Parabolico
-    connect(time_move,&QTimer::timeout,this,&Objeto_Movil::updatePos);
-        ///Movimiento Senoidal
-    //connect(time_move,&QTimer::timeout,this,&Objeto_Movil::updatePos2);
+    switch (move) {
+    case 1:
+            ///Movimiento Parabolico
+        connect(time_move,&QTimer::timeout,this,&Objeto_Movil::updatePos);
+        break;
+    case 2:
+            ///Movimiento Senoidal
+        connect(time_move,&QTimer::timeout,this,&Objeto_Movil::updatePos2);
+        break;
+    case 3:
+            ///Movimiento Rectilineo Acelerado
+        connect(time_move,&QTimer::timeout,this,&Objeto_Movil::updatePos3);
+        break;
+    default:
+            ///Movimiento Parabolico
+        connect(time_move,&QTimer::timeout,this,&Objeto_Movil::updatePos);
+        break;
+    }
+
+
+
 }
 
 Objeto_Movil::~Objeto_Movil()
@@ -92,6 +109,12 @@ void Objeto_Movil::updatePos()
 void Objeto_Movil::updatePos2()
 {
     movimiento->actualizarSeno();
+    this->set_Pos(movimiento->getX(),movimiento->getY());
+}
+
+void Objeto_Movil::updatePos3()
+{
+    movimiento->actualizarMUA();
     this->set_Pos(movimiento->getX(),movimiento->getY());
 }
 

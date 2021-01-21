@@ -34,7 +34,9 @@ public:
     void comeBack();
     void moveObject();
     void addObjetoGrafico(QString ruta,int x,int y, int w, int h);
-    void addObjetoMovil();
+    void addObjetoMovil1();
+    void addObjetoMovil2();
+    void addObjetoMovil3();
 
 
 
@@ -42,6 +44,7 @@ public:
     void add();
     void imagen1();
     void imagen2();
+    void setPosSir(int x, int y);
 
 private:
     Ui::MainWindow *ui;
@@ -65,6 +68,8 @@ private:
     bool serial_available = false;
     char serial_char;
     string serial_port = "/dev/ttyUSB0";
+
+    int x_sir = 0, y_sir = 500;
 
 };
 #endif // MAINWINDOW_H

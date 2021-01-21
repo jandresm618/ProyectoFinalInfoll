@@ -21,6 +21,8 @@ public:
     Movimiento();
     Movimiento(float x,float y,int xf,int yf);
 
+    /// MOVIMIENTO RECTILINEO ACELERADO
+    void actualizarMUA();
 
     /// MOVIMIENTO SENOIDAL
     void setMovSeno();

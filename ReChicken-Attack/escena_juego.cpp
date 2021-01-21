@@ -3,7 +3,7 @@
 ///         CONSTRUCTOR         ///
 Escena_Juego::Escena_Juego()
 {
-
+    image = new QPixmap(":/personajes/imagenes/fondo.png");
 }
 
 ///         DESTRUCTOR         ///
@@ -20,6 +20,11 @@ void Escena_Juego::setWindowProperty(int desk_w, int desk_h)
     limit_x = desk_w;
     limit_y = desk_h;
     setSceneRect(0,0,desk_w,desk_h);
+}
+
+void Escena_Juego::drawBackground(QPainter *painter, const QRectF &exposed)
+{
+    painter->drawPixmap(QRectF(0,0,limit_x,limit_y),*image,image->rect());
 }
 
 ///         ESTABLECER ESCENA ARCADE         ///
@@ -42,14 +47,14 @@ void Escena_Juego::addObjetoGrafico(QString ruta, int x, int y, int w, int h)
 }
 
 ///         AÑADIR OBJETOS GRAFICOS MOVILES         ///
-void Escena_Juego::addObjetoMovil(QString ruta, int x, int y,int xf,int yf, int w, int h)
+void Escena_Juego::addObjetoMovil(QString ruta, int x, int y,int xf,int yf, int w, int h, int move)
 {
     ///DECLARACION DE VARIABLES AUXILIARES LOCALES
     int param = 5;              //Parametro Altura Maxima
     bool minMax = true;         //Minimo Valor del Parametro
 
     ///CREACION DE OBJETO MOVIL
-    muni = new Objeto_Movil(ruta,x,y,limit_x,limit_y,w,h);
+    muni = new Objeto_Movil(ruta,x,y,limit_x,limit_y,w,h,move);
     objetosMoviles.push_back(muni);     //Añadir objeto a la lista de objetos moviles
 
     /// ASIGNACION DE MOVIMIENTO PARABOLICO

@@ -12,11 +12,16 @@ Control_Usuario::Control_Usuario(QWidget *parent) :
 
     ///DECLARACION DE OBJETOS
     deskWidget = new QDesktopWidget;
-    go2Main = new QPushButton(QString("MAINWINDOW"),this);
+    go2Main = new QPushButton(QString("MainWindow"),this);
+
 
     ///ASIGNACION DE VALORES
     desk_width = deskWidget->width();   desk_height = deskWidget->height();
-    go2Main->setGeometry(100,100,100,70);
+    setGeometry(0,0,desk_width,desk_height);
+
+    go2Main->setGeometry(2*desk_width/3,2*desk_height/3,100,100);
+    go2Main->setStyleSheet("border-image: url(:/imagenes/LOAD GAME.png);");
+
 
     ///CONEXION DE SIGNAL & SLOT
     connect(go2Main,&QPushButton::clicked,this,&Control_Usuario::showMainWindow);
@@ -42,7 +47,8 @@ void Control_Usuario::showMainWindow()
 
         ///ASIGNACION DE VALORES
         gameWindow->setDeskProperty(desk_width,desk_height);
-        gameWindow->addObjetoGrafico(":/personajes/imagenes/bullet.png",250,300,100,100);
+        gameWindow->addObjetoGrafico(":/personajes/imagenes/senor1.png",desk_width/8,2*desk_height/4,200,300);
+        gameWindow->setPosSir(desk_width/8,2*desk_height/4);
         firstTime = false;
     }
 

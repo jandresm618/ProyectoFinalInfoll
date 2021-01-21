@@ -15,11 +15,12 @@ public:
     ~Escena_Juego();
 
     void setWindowProperty(int desk_w, int desk_h);
+    virtual void drawBackground(QPainter *painter, const QRectF &exposed);
 
     void arcadeDesing();
 
     void addObjetoGrafico(QString ruta,int x,int y,int w,int h);
-    void addObjetoMovil(QString ruta,int x,int y,int xf,int yf,int w,int h);
+    void addObjetoMovil(QString ruta,int x,int y,int xf,int yf,int w,int h,int move);
     void doSome();
 
     /// SLOTS DE OBJETOS MOVILES
@@ -36,7 +37,7 @@ private:
     vector<Objeto_Movil *>::iterator itObjMov;
 
     int limit_x,limit_y;
-
+    QPixmap *image;
 };
 
 #endif // ESCENA_JUEGO_H

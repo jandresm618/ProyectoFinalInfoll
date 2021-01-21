@@ -24,6 +24,7 @@ private:
     MainWindow *gameWindow;
     QPushButton *go2Main;
     QDesktopWidget *deskWidget;
+    QGraphicsView *view;
 
     int desk_width,desk_height;
 
