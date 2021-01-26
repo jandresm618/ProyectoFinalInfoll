@@ -3,6 +3,7 @@
 
 #include <QGraphicsScene>
 #include <QPushButton>
+#include <QGraphicsSceneMouseEvent>
 #include "objeto_grafico.h"
 #include "objeto_movil.h"
 
@@ -13,6 +14,8 @@ class Escena_Juego : public QGraphicsScene
 public:    
     Escena_Juego();
     ~Escena_Juego();
+
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) ;
 
     void setWindowProperty(int desk_w, int desk_h);
     virtual void drawBackground(QPainter *painter, const QRectF &exposed);

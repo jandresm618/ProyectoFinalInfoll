@@ -37,14 +37,12 @@
         <file>imagenes/new.png</file>
         <file>imagenes/NEW USER.png</file>
         <file>imagenes/nick.png</file>
-        <file>imagenes/nickgame.png</file>
         <file>imagenes/nickname.png</file>
         <file>imagenes/NICKNAME.png</file>
         <file>imagenes/OLD USER.png</file>
         <file>imagenes/password.png</file>
         <file>imagenes/PASSWORD.png</file>
         <file>imagenes/PLAYERS.png</file>
-        <file>imagenes/pollo.png</file>
         <file>imagenes/pollo2.png</file>
         <file>imagenes/RECORDS.png</file>
         <file>imagenes/RESTART.png</file>
@@ -55,6 +53,5 @@
         <file>imagenes/SING UP.png</file>
         <file>imagenes/swamp.png</file>
         <file>imagenes/user.png</file>
-        <file>imagenes/USER.png</file>
     </qresource>
 </RCC>

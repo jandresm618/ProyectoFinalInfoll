@@ -14,6 +14,12 @@ Escena_Juego::~Escena_Juego()
     delete muni;
 }
 
+void Escena_Juego::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsScene::mouseMoveEvent(event);
+    //qDebug()<<"x "<<event->scenePos().x()<<" y "<<event->scenePos().y();
+}
+
 ///         PROPIEDADES DE VENTANA         ///
 void Escena_Juego::setWindowProperty(int desk_w, int desk_h)
 {
@@ -54,11 +60,13 @@ void Escena_Juego::addObjetoMovil(QString ruta, int x, int y,int xf,int yf, int 
     bool minMax = true;         //Minimo Valor del Parametro
 
     ///CREACION DE OBJETO MOVIL
-    muni = new Objeto_Movil(ruta,x,y,limit_x,limit_y,w,h,move);
+    muni = new Objeto_Movil(ruta,x,y,xf,yf,w,h,move);
     objetosMoviles.push_back(muni);     //Añadir objeto a la lista de objetos moviles
 
     /// ASIGNACION DE MOVIMIENTO PARABOLICO
-    muni->setMovParabolico(xf,yf,param,minMax);   //Calcula velocidad y angulo inicial
+    if(move == 1) muni->setMovParabolico(xf,yf,param,minMax);   //Calcula velocidad y angulo inicial
+
+    //qDebug()<<"No hay problemas con la inicializacion del movimiento";
 
     //ASIGNACION DE MOVIMIENTO SENOIDAL
     //muni->setMovSenoidal();
@@ -83,11 +91,15 @@ void Escena_Juego::deleteFromScene()
         for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++,cont++){
             if((*itObjMov)->getOutOfScene()){
                 qDebug()<<"Fuera de Escena, Eliminando "<<cont;
+                this->removeItem((*itObjMov));
                 (*itObjMov)->deleteObject();
                 objetosMoviles.erase(itObjMov);
                 break;
             }
         }
     }
+    else{if(this->items().size()>1) qDebug()<<"Aun hay elementos en escena";}
+
+
 
 }

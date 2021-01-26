@@ -60,17 +60,21 @@ void Objeto_Movil::setMovParabolico(int xf, int yf,int param,bool minMax)
     vector<float> params;                                //Vector de Parametros de Lanzamiento
     int d = sqrt(pow(xf-this->getX(),2)+pow(yf-this->getY(),2)); //Distancia entre Objetos                              //Porcentaje de Impacto
 
+    //qDebug()<<"Distancia calculada";
     ///ASIGNACION DE VALORES
     movimiento->nParabolicos(xf,yf,d,factorImpacto);    //Se calculan las velocidades de lanzamiento
-
+    //movimiento->imprimirVector(movimiento->getLanzamientos());
+    //qDebug()<<"Calculados n parabolicos";
     ///DEBUG
     //qDebug()<<"GEtting Best...";
 
     ///ASIGNACION DE VALORES
     params = movimiento->getBest(param,minMax);         //Parametros para lanzamiento con altura minima
+    //qDebug()<<"Se eligio el mejor";
     angle = params.at(3);
     v0 = params.at(4);
     movimiento->setParamsMove(v0,angle);
+    //qDebug()<<"parametros seteados";
 }
 
 void Objeto_Movil::setVel(float _v0, float _angle)
@@ -108,13 +112,13 @@ void Objeto_Movil::updatePos()
 
 void Objeto_Movil::updatePos2()
 {
-    movimiento->actualizarSeno();
+    if(movimiento->actualizarSeno()){outOfScene = true;}
     this->set_Pos(movimiento->getX(),movimiento->getY());
 }
 
 void Objeto_Movil::updatePos3()
 {
-    movimiento->actualizarMUA();
+    if(movimiento->actualizarMUA()){outOfScene = true;}
     this->set_Pos(movimiento->getX(),movimiento->getY());
 }
 

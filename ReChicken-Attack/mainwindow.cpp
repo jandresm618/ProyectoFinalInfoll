@@ -146,33 +146,87 @@ void MainWindow::addObjetoGrafico(QString ruta, int x, int y, int w, int h)
     scene->addObjetoGrafico(ruta,x,y,w,h);
 }
 
+void MainWindow::addObjetoMovil(QString ruta, int xo, int yo, int xf, int yf, int w, int h, int _move)
+{
+    scene->addObjetoMovil(ruta,xo,yo,xf,yf,w,h,_move);
+}
+
 void MainWindow::addObjetoMovil1()
 {
+    move = 1;
     ///DECLARACION DE OBJETOS
     QString ruta = ":/personajes/imagenes/GIFT.png";int w=80; int h=80;
     int xf = 900,yf = 500;
-    int move = 1;
-    scene->addObjetoMovil(ruta,x_sir,y_sir,xf,yf,w,h,move);
+    scene->addObjetoMovil(ruta,xf,yf,x_sir,y_sir,w,h,move);
 }
 
 void MainWindow::addObjetoMovil2()
 {
+    move = 2;
     ///DECLARACION DE OBJETOS
     QString ruta = ":/personajes/imagenes/GIFT.png"; int w=80; int h=80;
     int xf = 900,yf = 500;
-    int move = 2;
-    scene->addObjetoMovil(ruta,x_sir,y_sir,xf,yf,w,h,move);
+    scene->addObjetoMovil(ruta,xf,yf,x_sir,y_sir,w,h,move);
 }
 
 void MainWindow::addObjetoMovil3()
 {
+    move = 3;
     ///DECLARACION DE OBJETOS
     QString ruta = ":/personajes/imagenes/GIFT.png"; int w=80; int h=80;
     int xf = 900,yf = 500;
-    int move = 3;
-    scene->addObjetoMovil(ruta,x_sir,y_sir,xf,yf,w,h,move);
+    scene->addObjetoMovil(ruta,xf,yf,x_sir,y_sir,w,h,move);
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Space ){
+        qDebug()<<"Space Pressed";
+        if(!arcade){
+            addObjetoMovil(QString(":/personajes/imagenes/pollo2.png"),
+                           desk_widht,300,x_sir,y_sir,100,100,move);
+        }
+    }
+    else if(event->key() == Qt::Key_A){
+        qDebug()<<"A Pressed";
+        move = 1;
+    }
+    else if(event->key() == Qt::Key_S){
+        qDebug()<<"S Pressed";
+        move = 2;
+    }
+    else if(event->key() == Qt::Key_W){
+        qDebug()<<"W Pressed";
+        move = 3;
+    }
+    else if(event->key() == Qt::Key_D){
+        qDebug()<<"D Pressed";
+        move = 3;
+    }
+    else if(event->key() == Qt::Key_J){
+        qDebug()<<"J Pressed";
+        move = 1;
+    }
+    else if(event->key() == Qt::Key_K){
+        qDebug()<<"K Pressed";
+        move = 2;
+    }
+    else if(event->key() == Qt::Key_L){
+        qDebug()<<"L Pressed";
+        move = 3;
+    }
+    else if(event->key() == Qt::Key_I){
+        qDebug()<<"I Pressed";
+    }
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    QMainWindow::mousePressEvent(event);
+    qDebug()<<"x "<<event->x()<<" y "<<event->y();
+    addObjetoMovil(QString(":/personajes/imagenes/Bala2.png"),
+                   x_sir,y_sir,event->x(),event->y(),50,50,move);
+}
 
 
 ///     FUNCIONES DE PRUEBA     ///
