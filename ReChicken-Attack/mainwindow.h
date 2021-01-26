@@ -31,6 +31,10 @@ public:
     /// CARACTERISTICAS DE PANTALLA
     void setDeskProperty(int w,int h);
 
+    /// MODOS DE JUEGO
+    void setArcade();
+    void setMultiplayer();
+
     /// SLOTS DE BOTONES
     void comeBack();
     void moveObject();

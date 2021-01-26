@@ -9,32 +9,51 @@ Control_Usuario::Control_Usuario(QWidget *parent) :
     ///ASIGNACION DE VALORES
     ui->setupUi(this);
 
-
-    ///DECLARACION DE OBJETOS
-    deskWidget = new QDesktopWidget;
-    go2Main = new QPushButton(QString("MainWindow"),this);
-
-
-    ///ASIGNACION DE VALORES
-    desk_width = deskWidget->width();   desk_height = deskWidget->height();
-    setGeometry(0,0,desk_width,desk_height);
-
-    go2Main->setGeometry(2*desk_width/3,2*desk_height/3,100,100);
-    go2Main->setStyleSheet("border-image: url(:/imagenes/LOAD GAME.png);");
-
-
-    ///CONEXION DE SIGNAL & SLOT
-    connect(go2Main,&QPushButton::clicked,this,&Control_Usuario::showMainWindow);
+    crearObjetos();     /// Inicializa los objetos que necesitan memoria dinamica
+    setCredentialsWindow(); /// Dispone los botones necesarios para la primera visualizacion
+    ///ASIGNACION DE VALORES DE VENTANA
+    setGeometry(0,0,desk_width,desk_height);    /// Geometria de la Ventana
 }
 
 
 ///     DESTRUCTOR       ///
 Control_Usuario::~Control_Usuario()
 {
-    delete go2Main;
+    delete boton1;
+    delete boton2;
+    delete boton3;
     delete gameWindow;
     delete deskWidget;
     delete ui;
+}
+
+void Control_Usuario::crearObjetos()
+{
+    ///DECLARACION DE OBJETOS
+    deskWidget = new QDesktopWidget;
+    desk_width = deskWidget->width();   desk_height = deskWidget->height();
+    boton1 = new QPushButton(QString("Arcade"),this); boton1->hide();
+    boton2 = new QPushButton(QString("Arcade"),this);
+    boton3 = new QPushButton("Multiplayer",this);
+}
+
+void Control_Usuario::setCredentialsWindow()
+{
+    ///POR AHORA
+    boton1->setGeometry(desk_width/3,2*desk_height/3,100,100);
+    boton1->setStyleSheet("border-image: url(:/imagenes/LOAD GAME.png);");
+    boton2->setGeometry(2*desk_width/3,desk_height/3,100,100);
+    boton2->setStyleSheet("border-image: url(:/imagenes/LOAD GAME.png);");
+    boton3->setGeometry(2*desk_width/3,2*desk_height/3,200,100);
+    /*
+    QPixmap pixmap(":/imagenes/LOAD GAME.png)"); QIcon ButtonIcon(pixmap);
+    boton3->setIcon(ButtonIcon);
+    boton3->setIconSize(pixmap.rect().size());*/
+    ///CONEXION DE SIGNAL & SLOT
+    connect(boton1,&QPushButton::clicked,this,&Control_Usuario::showMainWindow);
+    connect(boton2,&QPushButton::clicked,this,&Control_Usuario::setArcade);
+    connect(boton3,&QPushButton::clicked,this,&Control_Usuario::setMultiplayer);
+
 }
 
 void Control_Usuario::keyPressEvent(QKeyEvent *event)
@@ -63,4 +82,18 @@ void Control_Usuario::showNewMainWindow()
     gameWindow->addObjetoGrafico(":/personajes/imagenes/senor1.png",desk_width/8,2*desk_height/4,200,300);
     gameWindow->setPosSir(desk_width/8,2*desk_height/4);
     firstTime = false;
+}
+
+void Control_Usuario::setArcade()
+{
+    arcade = true;
+    showMainWindow();
+    gameWindow->setArcade();
+}
+
+void Control_Usuario::setMultiplayer()
+{
+    arcade = false;
+    showMainWindow();
+    gameWindow->setMultiplayer();
 }

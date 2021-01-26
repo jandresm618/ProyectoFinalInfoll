@@ -140,6 +140,16 @@ void MainWindow::setDeskProperty(int w, int h)
    scene->setWindowProperty(w,h);
 }
 
+void MainWindow::setArcade()
+{
+    arcade = true;
+}
+
+void MainWindow::setMultiplayer()
+{
+    arcade = false;
+}
+
 void MainWindow::addObjetoGrafico(QString ruta, int x, int y, int w, int h)
 {
     ///DECLARACION DE OBJETOS
