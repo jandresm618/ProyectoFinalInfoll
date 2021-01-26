@@ -17,7 +17,11 @@ public:
     explicit Control_Usuario(QWidget *parent = nullptr);
     ~Control_Usuario();
 
+    ///Eventos de Teclado
+    void keyPressEvent(QKeyEvent *event);
+
     void showMainWindow();
+    void showNewMainWindow();
 
 private:
     Ui::Control_Usuario *ui;

@@ -37,21 +37,30 @@ Control_Usuario::~Control_Usuario()
     delete ui;
 }
 
+void Control_Usuario::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Enter ){
+        qDebug()<<"Enter Pressed";
+    }
+}
+
 
 ///     FUNCION INICIAR JUEGO       ///
 void Control_Usuario::showMainWindow()
 {
-    if(firstTime){
-        ///DECLARACION DE OBJETO
-        gameWindow = new MainWindow(this);
-
-        ///ASIGNACION DE VALORES
-        gameWindow->setDeskProperty(desk_width,desk_height);
-        gameWindow->addObjetoGrafico(":/personajes/imagenes/senor1.png",desk_width/8,2*desk_height/4,200,300);
-        gameWindow->setPosSir(desk_width/8,2*desk_height/4);
-        firstTime = false;
-    }
-
+    if(firstTime) showNewMainWindow();
     gameWindow->show();
     this->hide();
+}
+
+void Control_Usuario::showNewMainWindow()
+{
+    ///DECLARACION DE OBJETO
+    gameWindow = new MainWindow(this);
+
+    ///ASIGNACION DE VALORES
+    gameWindow->setDeskProperty(desk_width,desk_height);
+    gameWindow->addObjetoGrafico(":/personajes/imagenes/senor1.png",desk_width/8,2*desk_height/4,200,300);
+    gameWindow->setPosSir(desk_width/8,2*desk_height/4);
+    firstTime = false;
 }

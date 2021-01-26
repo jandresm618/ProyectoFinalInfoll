@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
+#include <QKeyEvent>
 #include <QPushButton>
 #include <QGraphicsView>
 #include <QDebug>
@@ -34,9 +35,15 @@ public:
     void comeBack();
     void moveObject();
     void addObjetoGrafico(QString ruta,int x,int y, int w, int h);
+    void addObjetoMovil(QString ruta,int xo,int yo,int xf,int yf,int w,int h,int _move);
     void addObjetoMovil1();
     void addObjetoMovil2();
     void addObjetoMovil3();
+
+    ///Eventos de Teclado
+    void keyPressEvent(QKeyEvent *event);
+    ///Eventos del Mouse
+    void mousePressEvent(QMouseEvent *event) ;
 
 
 
@@ -70,6 +77,8 @@ private:
     string serial_port = "/dev/ttyUSB0";
 
     int x_sir = 0, y_sir = 500;
+    int move = 1;
+    bool arcade = true;
 
 };
 #endif // MAINWINDOW_H

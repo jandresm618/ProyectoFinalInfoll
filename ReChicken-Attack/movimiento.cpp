@@ -5,22 +5,31 @@ Movimiento::Movimiento()
 
 }
 
-Movimiento::Movimiento(float x,float y,int xf,int yf): px(x),py(y),pfx(xf),pfy(yf)
+Movimiento::Movimiento(float _x,float _y,int xf,int yf): x(_x),y(_y),px(_x),py(_y),pfx(xf),pfy(yf)
 {
     ///ASIGNACION DE LADO
-    if (x <= xf) lado = true;       //Movimiento de izquierda a derecha
+
+    if (_x <= xf) lado = true;       //Movimiento de izquierda a derecha
     else lado = false;              //Movimiento de derecha a izquierda
 }
 
-void Movimiento::actualizarMUA()
+bool Movimiento::actualizarMUA()
 {
+    bool outScene = false;
     float v = 10;
     float A = 30;
     float freq = 1/2;
+    if(!lado) v = -10;
     x = x + v*t;
     y = y + A*sin(2*3.1416*freq*t);
-    qDebug()<<x<<" , "<<t;
+    //qDebug()<<x<<" , "<<t;
     t = t +0.01;
+    ///SI SE CUMPLE LA CONDICION
+    if(lado) {if(x >= pfx) outScene = true;}    //Comprobando que el objeto siga en escena
+    if(!lado) {if(x <= pfx) outScene = true;}
+
+    ///RETORNO DE VALOR
+    return outScene;
 }
 
 void Movimiento::setMovSeno()
@@ -28,15 +37,24 @@ void Movimiento::setMovSeno()
     x = px; y = py;
 }
 
-void Movimiento::actualizarSeno()
+bool Movimiento::actualizarSeno()
 {
+    bool outScene = false;
     float v = 10;
     float A = 30;
     float freq = 1/2;
-    x = x + v;
+    if(lado) x = x + v;
+    else x = x - v;
+
     y = y + A*sin(/*2*3.1416*freq**/t);
-    qDebug()<<x<<" , "<<sin(2*3.1416*freq*x);
+    //qDebug()<<x<<" , "<<sin(2*3.1416*freq*x);
     t = t +0.4;
+    ///SI SE CUMPLE LA CONDICION
+    if(lado) {if(x >= pfx) outScene = true;}    //Comprobando que el objeto siga en escena
+    if(!lado) {if(x <= pfx) outScene = true;}
+
+    ///RETORNO DE VALOR
+    return outScene;
 }
 
 bool Movimiento::actualizar(float dt)
@@ -77,9 +95,10 @@ bool Movimiento::nParabolicos(float xf, float yf, float d, float factorImpacto)
                             //Iteracion para diferentes valores de Angulo
             x = px; y = py; angulo = angle, v0 = v0_;           //Inicializacion de Variables para cada valor de angulo y velocidad
             aux = parabolico(xf,yf,v0_,angle,d,factorImpacto);  //Retorna true si la parabola es efectiva
+            //qDebug()<<"Calculando parabolico";
             if(aux){
                                 // Se ejecuta si y solo si hubo impacto
-                cout<<endl<<"Impacto numero: "<<cont+1<<endl;
+                //qDebug()<<"Impacto numero: "<<cont+1;
                 setParametros(cont);
                 imprimirValoresImpacto(); impacto = true; cont++; break;
             }
@@ -176,6 +195,7 @@ vector<float> Movimiento::getBest(int param,bool minMax)
 {
     ///DECLARACION DE VARIABLES AUXILIARES
     int pos = getPosBestMove(param,minMax);
+    qDebug()<<"Posicion del mejor "<<pos;
 
     ///SI SE CUMPLE LA CONDICION
     if(pos != -1){                              //Si NO hay errores
@@ -217,6 +237,11 @@ void Movimiento::imprimirVector(vector<float> vec)
     }
 }
 
+map<int, vector<float> > Movimiento::getLanzamientos() const
+{
+    return lanzamientos;
+}
+
 int Movimiento::getPosBestMove(int param, bool minMax)
 {
     ///DECLARACION DE VARIABLES AUXILIARES LOCALES
@@ -227,7 +252,7 @@ int Movimiento::getPosBestMove(int param, bool minMax)
     it=lanzamientos.begin();
 
     ///SI SE CUMPLE LA CONDICION
-    if(param < it->second.size()){
+    if(unsigned(param) < it->second.size()){
         val = it->second.at(param);
         for(;it != lanzamientos.end();it++,cont++){
             ///SI SE CUMPLE LA CONDICION

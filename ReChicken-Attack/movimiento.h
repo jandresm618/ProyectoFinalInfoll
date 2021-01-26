@@ -19,14 +19,14 @@ class Movimiento
 public:
     /// CONSTRUCTORES
     Movimiento();
-    Movimiento(float x,float y,int xf,int yf);
+    Movimiento(float _x,float _y,int xf,int yf);
 
     /// MOVIMIENTO RECTILINEO ACELERADO
-    void actualizarMUA();
+    bool actualizarMUA();
 
     /// MOVIMIENTO SENOIDAL
     void setMovSeno();
-    void actualizarSeno();
+    bool actualizarSeno();
 
     /// MOVIMIENTO RECTILINEO ACELERADO
 
@@ -54,9 +54,11 @@ public:
     void imprimirValoresImpacto();
     void imprimirVector(vector<float> vec);
 
+    map<int, vector<float> > getLanzamientos() const;
+
 private:
     bool lado; //Indicador de bando
-                //false = Defensivo
+    //false = Defensivo
                 //true = Ofensivo
 
     float ymax = 0; //Variable Auxiliar
