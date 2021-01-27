@@ -56,6 +56,8 @@ public:
 
     map<int, vector<float> > getLanzamientos() const;
 
+    bool getLado() const;
+
 private:
     bool lado; //Indicador de bando
     //false = Defensivo

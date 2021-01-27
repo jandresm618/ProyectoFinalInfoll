@@ -54,6 +54,14 @@ void Objeto_Movil::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     painter->drawPixmap(boundingRect(),*(this->getImage()),this->getImage()->rect());
 }
 
+bool Objeto_Movil::closeness(Objeto_Movil *obj,int howFar)
+{
+    bool close = false;
+    int d = sqrt(sqrt(pow(obj->getX()-this->getX(),2)+pow(obj->getY()-this->getY(),2))); //Distancia entre Objetos)
+    if(d <= howFar) close = true;
+    return close;
+}
+
 void Objeto_Movil::setMovParabolico(int xf, int yf,int param,bool minMax)
 {
     ///DECLARACION DE VARIABLES AUXILIARES LOCALES
@@ -130,5 +138,10 @@ bool Objeto_Movil::getOutOfScene() const
 void Objeto_Movil::deleteObject()
 {
     delete this;
+}
+
+bool Objeto_Movil::getLado()
+{
+    return movimiento->getLado();
 }
 

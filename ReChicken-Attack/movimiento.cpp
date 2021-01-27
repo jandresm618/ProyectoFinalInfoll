@@ -242,6 +242,11 @@ map<int, vector<float> > Movimiento::getLanzamientos() const
     return lanzamientos;
 }
 
+bool Movimiento::getLado() const
+{
+    return lado;
+}
+
 int Movimiento::getPosBestMove(int param, bool minMax)
 {
     ///DECLARACION DE VARIABLES AUXILIARES LOCALES

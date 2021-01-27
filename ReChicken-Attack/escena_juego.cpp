@@ -83,12 +83,24 @@ void Escena_Juego::doSome()
     personaje->set_Pos(personaje->getX()+50,personaje->getY());
 }
 
+
 ///         ELIMINA LOS OBJETOS QUE ESTEN FUERA DE ESCENA´         ///
 void Escena_Juego::deleteFromScene()
 {
     int cont = 0;
+    vector<Objeto_Movil *>::iterator itObjMov2;
     if(!objetosMoviles.empty()){
         for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++,cont++){
+            for (itObjMov2 = objetosMoviles.begin();itObjMov2 != objetosMoviles.end();itObjMov2++) {
+                /// Si es bala ///              ///Si es Enemigo///
+                if((*itObjMov)->getLado() && !(*itObjMov2)->getLado()){
+                    qDebug()<<"COmprobando";
+                    if((*itObjMov)->collidesWithItem((*itObjMov2))
+                            /*|| (*itObjMov)->closeness((*itObjMov2),50)*/){
+                        qDebug()<<"COLLISION DETECTADA";
+                    }
+                }
+            }
             if((*itObjMov)->getOutOfScene()){
                 qDebug()<<"Fuera de Escena, Eliminando "<<cont;
                 this->removeItem((*itObjMov));
@@ -98,7 +110,7 @@ void Escena_Juego::deleteFromScene()
             }
         }
     }
-    else{if(this->items().size()>1) qDebug()<<"Aun hay elementos en escena";}
+    /*else{if(this->items().size()>1) qDebug()<<"Aun hay elementos en escena";}*/
 
 
 

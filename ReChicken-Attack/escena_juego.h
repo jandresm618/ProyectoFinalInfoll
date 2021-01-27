@@ -26,6 +26,7 @@ public:
     void addObjetoMovil(QString ruta,int x,int y,int xf,int yf,int w,int h,int move);
     void doSome();
 
+
     /// SLOTS DE OBJETOS MOVILES
     void deleteFromScene();
 

@@ -17,6 +17,7 @@ public:
     //PROPIEDADES DE VISUALIZACION
     virtual QRectF boundingRect() const;
     virtual void paint(QPainter *painter,const QStyleOptionGraphicsItem *option, QWidget *widget);
+    bool closeness(Objeto_Movil *obj,int howFar);
 
     void setMovParabolico(int xf,int yf,int param,bool minMax);
     void setVel(float _v0,float _angle);
@@ -32,6 +33,8 @@ public:
 
     bool getOutOfScene() const;
     void deleteObject();
+
+    bool getLado();
 
 private:
     Movimiento *movimiento;
