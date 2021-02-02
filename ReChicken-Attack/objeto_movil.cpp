@@ -38,8 +38,10 @@ Objeto_Movil::Objeto_Movil(QString _ruta, int _x, int _y,int _xf,int _yf, int _w
 Objeto_Movil::~Objeto_Movil()
 {
     ///ELIMINACION DE MEMORIA
+    //qDebug()<<"Destruyendo elementos de Objetos";
     delete movimiento;
     delete time_move;
+    delete this->parent();
 }
 
 QRectF Objeto_Movil::boundingRect() const
@@ -113,7 +115,7 @@ void Objeto_Movil::stopMove()
 void Objeto_Movil::updatePos()
 {
     ///SI SE CUMPLE LA CONDICION
-    if (movimiento->actualizar(0.1)) {emit outScene(); outOfScene = true; /*delete this;*/}       //EMITE SEÑAL
+    if (movimiento->actualizar(0.1)) {outOfScene = true; /*delete this;*/}       //EMITE SEÑAL
     ///ASIGNACION DE VALORES
     this->set_Pos(movimiento->getX(),movimiento->getY());
 }
@@ -130,6 +132,11 @@ void Objeto_Movil::updatePos3()
     this->set_Pos(movimiento->getX(),movimiento->getY());
 }
 
+void Objeto_Movil::stop()
+{
+    time_move->stop();
+}
+
 bool Objeto_Movil::getOutOfScene() const
 {
     return outOfScene;
@@ -137,6 +144,8 @@ bool Objeto_Movil::getOutOfScene() const
 
 void Objeto_Movil::deleteObject()
 {
+    //time_move->stop();
+    //qDebug()<<"Eliminando Objeto at .... No se";
     delete this;
 }
 

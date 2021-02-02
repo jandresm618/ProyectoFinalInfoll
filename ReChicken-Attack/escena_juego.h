@@ -26,9 +26,14 @@ public:
     void addObjetoMovil(QString ruta,int x,int y,int xf,int yf,int w,int h,int move);
     void doSome();
 
+    void setHurt();
+    int getHurt();
 
     /// SLOTS DE OBJETOS MOVILES
-    void deleteFromScene();
+    bool deleteFromScene();
+
+    int getScore() const;
+    void setScore();
 
 private:
     Objeto_Grafico *personaje;
@@ -39,9 +44,13 @@ private:
     vector<Objeto_Grafico *>::iterator itObjGra;
     vector<Objeto_Movil *> objetosMoviles;
     vector<Objeto_Movil *>::iterator itObjMov;
+    vector<Objeto_Movil *>::iterator itObjMov2;
 
     int limit_x,limit_y;
     QPixmap *image;
+
+    int blood = 100;
+    int score = 0;
 };
 
 #endif // ESCENA_JUEGO_H

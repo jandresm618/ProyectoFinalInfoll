@@ -29,6 +29,7 @@ public:
     void updatePos();
     void updatePos2();
     void updatePos3();
+    void stop();
 
 
     bool getOutOfScene() const;

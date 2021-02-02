@@ -47,6 +47,8 @@ private:
     QPushButton *boton2;
     QPushButton *boton3;
 
+    QLabel *label1;
+
     int desk_width,desk_height;
 
     bool firstTime = true;

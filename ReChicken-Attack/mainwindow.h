@@ -8,6 +8,9 @@
 #include <QPushButton>
 #include <QGraphicsView>
 #include <QDebug>
+#include <QLCDNumber>
+#include <QLabel>
+#include <QProgressBar>
 #include "escena_juego.h"
 
 
@@ -31,11 +34,16 @@ public:
     /// CARACTERISTICAS DE PANTALLA
     void setDeskProperty(int w,int h);
 
+    void instanceItems();
+    void addItems2Scene(int opc);
+    void connectItems();
+    void setGameWidgets();
+
     /// MODOS DE JUEGO
     void setArcade();
     void setMultiplayer();
 
-    /// SLOTS DE BOTONES
+    /// SLOTS
     void comeBack();
     void moveObject();
     void addObjetoGrafico(QString ruta,int x,int y, int w, int h);
@@ -43,6 +51,7 @@ public:
     void addObjetoMovil1();
     void addObjetoMovil2();
     void addObjetoMovil3();
+    void secondsPlusPlus();
 
     ///Eventos de Teclado
     void keyPressEvent(QKeyEvent *event);
@@ -52,6 +61,8 @@ public:
 
 
     /// FUNCIONES DE PRUEBA
+    int sec2min(int _seconds,bool out);
+    bool canShot(int limit);
     void add();
     void imagen1();
     void imagen2();
@@ -67,9 +78,16 @@ private:
     QPushButton *boton3;
     QPushButton *boton4;
     QPushButton *boton5;
+
+    QLabel *label1;
+
+    QLCDNumber *display_time;
+    QProgressBar *life_bar;
+
     QGraphicsView *view;
 
-    QTimer *time;
+    QTimer *serial_timer;
+    QTimer *seconds;
 
     Escena_Juego *scene;
 
@@ -79,10 +97,19 @@ private:
     bool serial_available = false;
     char serial_char;
     string serial_port = "/dev/ttyUSB0";
+    QString time_format;
 
+        ///POSICION DE PERSONAJE PRINCIPAL
     int x_sir = 0, y_sir = 500;
-    int move = 1;
+        /// NUMERO DE MUNICIONES
+    int ammu1 = 10, ammu2 = 10, ammu3 =  10;
+        /// INDICADOR DE TIPO MOVIMIENTO
+    int move1 = 1 , move2 = 1;
+    int fs_time = 70, game_time = 0;
     bool arcade = true;
+
+    int cont_aux = 0;
+    bool enable2Shot = true;
 
 };
 #endif // MAINWINDOW_H
