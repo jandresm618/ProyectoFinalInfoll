@@ -494,7 +494,7 @@ void MainWindow::endOfGame()
     int score = scene->getScore()*int(increment*game_time);
     scene->pause();
     QMessageBox::information(this,"SCORE",  QString().number(score));
-    if(arcade || player == 2){
+    if(arcade || (player == 2 && scene->getBlood()==0)){
         ///FIN  DE JUEGO
         scene->restart();
         comeBack();
@@ -502,7 +502,7 @@ void MainWindow::endOfGame()
     else{
         ///REINICIO DE VALORES DE JUEGO
         player = 2;
-        this->restart();
+        this->restart(player);
         QMessageBox::information(this,"TURNO 2",  "PLAYER 2");
         this->start();
     }
@@ -544,11 +544,11 @@ void MainWindow::start()
     scene->start();
 }
 
-void MainWindow::restart()
+void MainWindow::restart(int player)
 {
     scene->restart();
-    game_time = 0;
-
+    game_time = 0;    
+    setGameValues(100,0,player,10,10,10,arcade);
 }
 
 

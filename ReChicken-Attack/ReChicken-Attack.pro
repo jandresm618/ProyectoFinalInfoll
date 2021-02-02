@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     control_usuario.cpp \
+    database.cpp \
     escena_juego.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 
 HEADERS += \
     control_usuario.h \
+    database.h \
     escena_juego.h \
     mainwindow.h \
     movimiento.h \

@@ -143,21 +143,14 @@ bool Escena_Juego::deleteFromScene()
                     /// Si es bala ///              ///Si es Enemigo///
                     if((*itObjMov)->getLado() && !(*itObjMov2)->getLado()){                        
                         if((*itObjMov)->collidesWithItem((*itObjMov2))
+                                && ((*itObjMov2)->collidesWithItem((*itObjMov)))
                                 /*|| (*itObjMov)->closeness((*itObjMov2),10)*/){
                             collides = true; setScorePlus();
+                            (*itObjMov)->deleteObject();
                             objetosMoviles.erase(itObjMov);
+                            (*itObjMov2)->deleteObject();
                             objetosMoviles.erase(itObjMov2);
-                            /*delete */(*itObjMov)->deleteLater();
-                            /*delete */(*itObjMov2)->deleteLater();
-                            /*
-                            if((*itObjMov) == objetosMoviles.at(cont)){
-                                qDebug()<<"Iguales 1";
-                                objetosMoviles.erase(itObjMov);
-                            }
-                            if((*itObjMov2) == objetosMoviles.at(cont2)){
-                                qDebug()<<"Iguales 2";
-                                objetosMoviles.erase(itObjMov2);
-                            }*/
+
 
                             return collides;
                         }

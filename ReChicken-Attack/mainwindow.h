@@ -72,7 +72,7 @@ public:
     void addEnemy();
     void pause();
     void start();
-    void restart();
+    void restart(int player);
     void add();
     void imagen1();
     void imagen2();
@@ -122,7 +122,7 @@ private:
     int ammu1 = 10, ammu2 = 10, ammu3 =  10;
         /// INDICADOR DE TIPO MOVIMIENTO
     int move1 = 1 , move2 = 1;
-    int fs_time = 30, game_time = 0;
+    int fs_time = 50, game_time = 0;
     bool arcade = true;
     bool paused = false;
     int time_enemys = 1500,time_seconds = 1000;
