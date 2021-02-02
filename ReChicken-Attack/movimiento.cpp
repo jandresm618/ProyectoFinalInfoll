@@ -100,7 +100,7 @@ bool Movimiento::nParabolicos(float xf, float yf, float d, float factorImpacto)
                                 // Se ejecuta si y solo si hubo impacto
                 //qDebug()<<"Impacto numero: "<<cont+1;
                 setParametros(cont);
-                imprimirValoresImpacto(); impacto = true; cont++; break;
+                /*imprimirValoresImpacto();*/ impacto = true; cont++; break;
             }
             if(cont == 1) break;
         }
@@ -195,7 +195,7 @@ vector<float> Movimiento::getBest(int param,bool minMax)
 {
     ///DECLARACION DE VARIABLES AUXILIARES
     int pos = getPosBestMove(param,minMax);
-    qDebug()<<"Posicion del mejor "<<pos;
+    //qDebug()<<"Posicion del mejor "<<pos;
 
     ///SI SE CUMPLE LA CONDICION
     if(pos != -1){                              //Si NO hay errores
@@ -206,7 +206,7 @@ vector<float> Movimiento::getBest(int param,bool minMax)
         parametrosLanzamiento.push_back(lanzamientos.at(pos).at(3));
         parametrosLanzamiento.push_back(lanzamientos.at(pos).at(4));
         parametrosLanzamiento.push_back(lanzamientos.at(pos).at(5));
-        imprimirVector(parametrosLanzamiento);
+        //imprimirVector(parametrosLanzamiento);
     }
 
     ///RETORNO DE VALOR

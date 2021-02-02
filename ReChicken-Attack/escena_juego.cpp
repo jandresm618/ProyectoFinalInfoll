@@ -73,7 +73,7 @@ void Escena_Juego::addObjetoMovil(QString ruta, int x, int y,int xf,int yf, int 
 
     /// INICIALIZACION DE OBJETO EN ESCENA
     this->addItem(muni);                //Se añade el objeto a la escena
-    muni->startMove(50);                //Asigna valor de timeout para el movimiento
+    muni->startMove(60);                //Asigna valor de timeout para el movimiento
 }
 
 ///         FUNCION MOVIMIENTO DE PRUEBA         ///
@@ -83,35 +83,91 @@ void Escena_Juego::doSome()
     personaje->set_Pos(personaje->getX()+50,personaje->getY());
 }
 
+int Escena_Juego::getHurt()
+{
+    return blood;
+}
+
+void Escena_Juego::setHurt()
+{
+    blood -= 10;
+}
+
 
 ///         ELIMINA LOS OBJETOS QUE ESTEN FUERA DE ESCENA´         ///
-void Escena_Juego::deleteFromScene()
+bool Escena_Juego::deleteFromScene()
 {
-    int cont = 0;
-    vector<Objeto_Movil *>::iterator itObjMov2;
+    bool collides = false;
+    int cont = 0,cont2 = 0;
+    //qDebug()<<"Verificando Chequeo\n";
     if(!objetosMoviles.empty()){
+        //qDebug()<<"Listo Para Chequeo de objetos";
         for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++,cont++){
-            for (itObjMov2 = objetosMoviles.begin();itObjMov2 != objetosMoviles.end();itObjMov2++) {
-                /// Si es bala ///              ///Si es Enemigo///
-                if((*itObjMov)->getLado() && !(*itObjMov2)->getLado()){
-                    qDebug()<<"COmprobando";
-                    if((*itObjMov)->collidesWithItem((*itObjMov2))
-                            /*|| (*itObjMov)->closeness((*itObjMov2),50)*/){
-                        qDebug()<<"COLLISION DETECTADA";
-                    }
+            if(collides) qDebug()<<"OJOOOOOOOOOOOOO";
+            //qDebug()<<"Iterador 1 asignado";
+            if((*itObjMov)->getOutOfScene()){
+                collides = true;
+                //qDebug()<<"Eliminando por Limite";
+                if(!(*itObjMov)->getLado()){
+                    ///SE REDUCE LA VIDA DEL JUGADOR
+                    this->setHurt();
+                    // qDebug()<<"Vida: "<<getHurt();
+                }
+                if((*itObjMov) == objetosMoviles.at(cont)){
+                    (*itObjMov)->deleteObject();
+                    //qDebug()<<"Objeto a Eliminar"<<&(objetosMoviles.at(cont));
+                    objetosMoviles.erase(itObjMov);
+                }
+                return collides;
+            }
+            else{
+                //qDebug()<<"Eliminando por colision";
+                for (itObjMov2 = objetosMoviles.begin(),cont2=0;itObjMov2 != objetosMoviles.end();itObjMov2++,cont2++) {
+                    /// Si es bala ///              ///Si es Enemigo///
+                    if(collides) qDebug()<<"OJOOOOOOOOOOOOO";
+                    if((*itObjMov)->getLado() && !(*itObjMov2)->getLado()){
+                        //qDebug()<<"Detectando Colision de objeto "<<cont+1<<"  con objeto "<<cont2+1;
+                        if((*itObjMov)->collidesWithItem((*itObjMov2))
+                                /*|| (*itObjMov)->closeness((*itObjMov2),10)*/){
+                            collides = true; setScore();
+                            //qDebug()<<"Score: "<<getScore();
+
+                            objetosMoviles.erase(itObjMov);
+                            objetosMoviles.erase(itObjMov2);
+                            delete (*itObjMov);
+                            delete (*itObjMov2);
+                            /*
+                            if((*itObjMov) == objetosMoviles.at(cont)){
+                                qDebug()<<"Iguales 1";
+                                objetosMoviles.erase(itObjMov);
+                            }
+                            if((*itObjMov2) == objetosMoviles.at(cont2)){
+                                qDebug()<<"Iguales 2";
+                                objetosMoviles.erase(itObjMov2);
+                            }*/
+
+
+
+                            return collides;
+                        }
+                    }//qDebug()<<"Iteracion Interna "<<cont2;
                 }
             }
-            if((*itObjMov)->getOutOfScene()){
-                qDebug()<<"Fuera de Escena, Eliminando "<<cont;
-                this->removeItem((*itObjMov));
-                (*itObjMov)->deleteObject();
-                objetosMoviles.erase(itObjMov);
-                break;
-            }
+            //qDebug()<<"Iteracion "<<cont;
         }
     }
     /*else{if(this->items().size()>1) qDebug()<<"Aun hay elementos en escena";}*/
 
+    return collides;
 
+}
 
+int Escena_Juego::getScore() const
+{
+    return score;
+}
+
+void Escena_Juego::setScore()
+{
+    score ++;
 }
