@@ -29,11 +29,19 @@ public:
     void setHurt();
     int getHurt();
 
+    void pause();
+    void start();
+    void restart();
+
     /// SLOTS DE OBJETOS MOVILES
     bool deleteFromScene();
 
     int getScore() const;
-    void setScore();
+    void setScore(int value);
+    void setScorePlus();
+
+    int getBlood() const;
+    void setBlood(int value);
 
 private:
     Objeto_Grafico *personaje;
@@ -51,6 +59,8 @@ private:
 
     int blood = 100;
     int score = 0;
+    int cont_1 = 0;
+    int time_move = 60;
 };
 
 #endif // ESCENA_JUEGO_H

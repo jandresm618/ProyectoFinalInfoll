@@ -11,6 +11,9 @@
 #include <QLCDNumber>
 #include <QLabel>
 #include <QProgressBar>
+#include <QMessageBox>
+#include <stdlib.h>
+#include <time.h>
 #include "escena_juego.h"
 
 
@@ -35,9 +38,10 @@ public:
     void setDeskProperty(int w,int h);
 
     void instanceItems();
+    void hideItems();
     void addItems2Scene(int opc);
     void connectItems();
-    void setGameWidgets();
+    void loadGame();
 
     /// MODOS DE JUEGO
     void setArcade();
@@ -63,6 +67,12 @@ public:
     /// FUNCIONES DE PRUEBA
     int sec2min(int _seconds,bool out);
     bool canShot(int limit);
+    void endOfGame();
+    void setGameValues(int _blood, int _score, int _player, int _a1, int _a2, int _a3, bool _arcade);
+    void addEnemy();
+    void pause();
+    void start();
+    void restart();
     void add();
     void imagen1();
     void imagen2();
@@ -70,26 +80,33 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    /// OBJETO SERIAL
+        /// OBJETO PUERTO SERIAL
     QSerialPort serial;
-
+        /// BOTONES
     QPushButton *boton;
     QPushButton *boton2;
     QPushButton *boton3;
     QPushButton *boton4;
     QPushButton *boton5;
-
+        /// LABELS
     QLabel *label1;
-
+    QLabel *label2;
+        /// LCD DISPLAYS
     QLCDNumber *display_time;
+    QLCDNumber *display_ammo1;
+    QLCDNumber *display_ammo2;
+    QLCDNumber *display_ammo3;
+    QLCDNumber *display_score;
+        /// BARRA DE SANGRE
     QProgressBar *life_bar;
 
-    QGraphicsView *view;
-
+        /// TIMERS
     QTimer *serial_timer;
+    QTimer *enemy_timer;
     QTimer *seconds;
-
+        /// ESCENARIO
     Escena_Juego *scene;
+    QGraphicsView *view;
 
     int desk_widht,desk_height;
     bool img = true;
@@ -105,11 +122,19 @@ private:
     int ammu1 = 10, ammu2 = 10, ammu3 =  10;
         /// INDICADOR DE TIPO MOVIMIENTO
     int move1 = 1 , move2 = 1;
-    int fs_time = 70, game_time = 0;
+    int fs_time = 30, game_time = 0;
     bool arcade = true;
+    bool paused = false;
+    int time_enemys = 1500,time_seconds = 1000;
 
+
+    int player = 1;    
     int cont_aux = 0;
     bool enable2Shot = true;
+    float increment = 1.3;
+
+signals:
+    void end();
 
 };
 #endif // MAINWINDOW_H
