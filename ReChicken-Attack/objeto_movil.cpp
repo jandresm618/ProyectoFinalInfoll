@@ -20,6 +20,7 @@ Objeto_Movil::~Objeto_Movil()
     ///ELIMINACION DE MEMORIA
     delete movimiento;
     delete time_move;
+
 }
 
 QRectF Objeto_Movil::boundingRect() const
