@@ -132,6 +132,8 @@ void MainWindow::instanceItems()
         /// ESCENARIO
     view = new QGraphicsView(this);
     scene = new Escena_Juego();
+
+    msgBox = new QMessageBox(this);
         /// BOTONES
     boton = new QPushButton();
     boton2 = new QPushButton();
@@ -228,6 +230,10 @@ void MainWindow::addItems2Scene(int opc)
             life_bar->setPalette(p1);
             break;
         case 2:
+                /// IMAGEN DE FONDO PARA LA VENTANA DE MENSAJES
+            msgBox->setStyleSheet("border-image:url(:/personajes/imagenes/swamp.png);");
+            msgBox->setPalette(p);
+            msgBox->setGeometry((desk_widht/2)-100,(2*desk_height/3)-100,300,400);
                 ///PUESTA EN ESCENA DEL PERSONAJE
             addObjetoGrafico(":/personajes/imagenes/senor1.png",desk_widht/8,2*desk_height/4,200,300);
             setPosSir(desk_widht/8,2*desk_height/4);
@@ -324,9 +330,10 @@ void MainWindow::loadGame()
 
 }
 
-void MainWindow::startGame()
+void MainWindow::startGame(QString title,QString text)
 {
         ///INICIALIZAR PARAMETROS
+    infoBox(title,text);
     paused = false;
     serialInit();
     serial_timer->start(fs_time);
@@ -340,8 +347,7 @@ void MainWindow::setArcade()
 {
     arcade = true; player = 1; game_time = 0;
     loadGame();
-    QMessageBox::information(this,"TURNO 1",  "PLAYER 1");
-    startGame();
+    startGame("NEW GAME","DO YOUR BEST.");
 }
 
 ///         OPCION MULTIJUGADOR         ///
@@ -349,8 +355,7 @@ void MainWindow::setMultiplayer()
 {
     arcade = false; player = 1; game_time = 0;
     loadGame();
-    QMessageBox::information(this,"TURNO 1",  "PLAYER 1");
-    startGame();
+    startGame("NEW GAME","DO YOUR BEST.");
 }
 
 ///         AÑADE OBJETOS SIN MOVIMIENTO         ///
@@ -470,57 +475,55 @@ bool MainWindow::canShot(int limit)
 
 void MainWindow::endOfGame()
 {
-    /*
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("GAME ENDED");
-    msgBox.setText("THE WINNER IS:");
-    if(score_2>score_3  || score_4>game->getScore()){
-        if(score_2>score_4)msgBox.setInformativeText("PLAYER 1"+QString::number(score_2));
-        else msgBox.setInformativeText("PLAYER 3"+QString::number(score_4));
-    }
-    else {
-        if(score_3>game->getScore())msgBox.setInformativeText("PLAYER 2"+QString::number(score_3));
-        else msgBox.setInformativeText("PLAYER 4"+QString::number(game->getScore()));
-    }
-
-    QPushButton *exitButton = msgBox.addButton(tr("MENU"), QMessageBox::ActionRole);
-    QPushButton *abortButton = msgBox.addButton(tr("RESTART"),QMessageBox::ActionRole);
-
-
-    msgBox.exec();
-
-    if (msgBox.clickedButton() == exitButton) {
-        // connect
-        this->parentWidget()->show();
-        this->close();
-        this->deleteLater();
-    } else if (msgBox.clickedButton() == abortButton) {
-        // abort
-        restart();
-    }*/
-        /// PAUSA A TODO EN ESCENA
+    QString title, infoText,text;
+    /// PAUSA A TODO EN ESCENA
     pause();
 
     if(arcade){
-        /// FIN DE JUEGO ARCADE
+    /// FIN DE JUEGO ARCADE
         score_player1 = scene->getScore()*int(increment*game_time);
-        QMessageBox::information(this,"SCORE",  QString().number(score_player1));
-        scene->restart();
-        comeBack();
+        title = "GAME ENDED";
+        text = "THE FINAL SCORE IS:";
+        infoText = QString::number(score_player1);
+        if(!questionBox(title,text,infoText,"MENU","RESTART")){
+            // GO TO MENU
+            scene->restart();
+            comeBack();
+        }
+        else{
+            // RESTART
+            this->restart("¿AGAIN?","TRY TO DO BETTER.");
+
+        }
+
     }
     else if(player == 2){
         /// FIN DE JUEGO MULTIPLAYER
         score_player2 = scene->getScore()*int(increment*game_time);
-        QMessageBox::information(this,"SCORE",  QString().number(score_player2));
-        scene->restart();
-        comeBack();
+        title = "GAME OVER";
+        text = "THE WINNER IS:";
+
+        if(score_player1 > score_player2){
+            infoText = "PLAYER 1 -> SCORE: "+QString::number(score_player1);
+        }
+        else {
+            infoText = "PLAYER 2 -> SCORE: "+QString::number(score_player2);
+        }
+        if (!questionBox(title,text,infoText,"MENU","RESTART")) {
+            // GO TO MENU
+            scene->restart();
+            comeBack();
+        } else {
+            // RESTART
+            this->restart("NICE BATTLE","WHO`S GONNA WIN THIS TIME?");
+        }
+
     }
     else{
-        /// FIN DE JUEGO PLAYER 1
+        score_player1 = scene->getScore()*int(increment*game_time);
+        this->restart("PLAYER 2","BEAT HIM.");
         player = 2;
-        this->restart(player);
-        QMessageBox::information(this,"TURNO 2",  "PLAYER 2");
-        this->start();
+        qDebug()<<player;
     }
 }
 
@@ -546,10 +549,6 @@ void MainWindow::setDefaultValues()
     ammu3 = 10; display_ammo3->display(ammu3);
     paused = false;
     enable2Shot = true;
-
-
-
-
 }
 
 void MainWindow::addEnemy()
@@ -574,14 +573,48 @@ void MainWindow::start()
     serial_timer->start(fs_time);
     seconds->start(time_seconds);
     if(arcade) enemy_timer->start(time_enemys);
-    scene->start();
 }
 
-void MainWindow::restart(int player)
+void MainWindow::restart(QString title,QString text)
 {
+
     scene->restart();
     game_time = 0;    
-    setGameValues(100,0,player,10,10,10,arcade);
+    setDefaultValues();
+    this->startGame(title,text);
+}
+
+bool MainWindow::questionBox(QString title, QString text, QString infoText, const char * _boton1, const char* _boton2)
+{
+    bool option = false;
+    msgBox->setWindowTitle(title);
+    msgBox->setText(text);
+    msgBox->setInformativeText(infoText);
+    msgBox->setGeometry((desk_widht/2)-100,(2*desk_height/3)-100,300,400);
+    QPushButton *menuButton = msgBox->addButton(tr(_boton1), QMessageBox::ActionRole);
+    QPushButton *restartButton = msgBox->addButton(tr(_boton2),QMessageBox::ActionRole);
+    msgBox->exec();
+    if (msgBox->clickedButton() == menuButton) {
+        // FALSE -> OPCION 1
+        option = false;
+    } else if (msgBox->clickedButton() == restartButton) {
+        // TRUE -> OPCION 2
+        option = true;
+    }
+    msgBox->removeButton(menuButton);msgBox->removeButton(restartButton);
+    delete menuButton; delete restartButton;
+    //msgBox->hide();
+    return option;
+}
+
+void MainWindow::infoBox(QString title, QString text)
+{
+    msgBox->setWindowTitle(title);
+    msgBox->setText(text);
+    msgBox->setGeometry((desk_widht/2)-100,(2*desk_height/3)-100,300,700);
+    msgBox->exec();
+    //msgBox->removeButton(msgBox->buttons().at(0));
+    msgBox->hide();
 }
 
 

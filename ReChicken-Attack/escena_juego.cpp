@@ -90,24 +90,30 @@ int Escena_Juego::getHurt()
 
 void Escena_Juego::pause()
 {
-    for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++){
-        (*itObjMov)->stop();
+    if(!objetosMoviles.empty()){
+        for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++){
+            (*itObjMov)->stop();
+        }
     }
 }
 
 void Escena_Juego::start()
 {
-    for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++){
-        (*itObjMov)->startMove(time_move);
+    if(!objetosMoviles.empty()){
+        for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++){
+            (*itObjMov)->startMove(time_move);
+        }
     }
 }
 
 void Escena_Juego::restart()
 {
-    for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++){
-        (*itObjMov)->deleteObject();
+    if(!objetosMoviles.empty()){
+        for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++){
+            (*itObjMov)->deleteObject();
+        }
+        objetosMoviles.clear();
     }
-    objetosMoviles.clear();
     score = 0;
     blood = 100;
 }

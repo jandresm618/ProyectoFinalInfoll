@@ -43,12 +43,14 @@ public:
     void addItems2Scene(int opc);
     void connectItems();
     void loadGame();
-    void startGame();
+    void startGame(QString title,QString text);
         /// FUNCIONES CONTROL DEL JUEGO
     void endOfGame();
     void pause();
     void start();
-    void restart(int player);
+    void restart(QString title,QString text);
+    bool questionBox(QString title,  QString text,QString infoText, const char *_boton1, const char *_boton2);
+    void infoBox(QString title,QString text);
 
         /// MODOS DE JUEGO
     void setArcade();
@@ -86,6 +88,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    QMessageBox *msgBox;
         /// OBJETO PUERTO SERIAL
     QSerialPort serial;
         /// BOTONES
