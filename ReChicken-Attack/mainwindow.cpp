@@ -319,11 +319,15 @@ void MainWindow::loadGame()
 {
     int opc = 2;
     addItems2Scene(opc);
-    connectItems();   
+    connectItems();
 
-    QMessageBox::information(this,"TURNO 1",  "PLAYER 1");
 
+}
+
+void MainWindow::startGame()
+{
         ///INICIALIZAR PARAMETROS
+    paused = false;
     serialInit();
     serial_timer->start(fs_time);
     seconds->start(time_seconds);
@@ -336,6 +340,8 @@ void MainWindow::setArcade()
 {
     arcade = true; player = 1; game_time = 0;
     loadGame();
+    QMessageBox::information(this,"TURNO 1",  "PLAYER 1");
+    startGame();
 }
 
 ///         OPCION MULTIJUGADOR         ///
@@ -343,6 +349,8 @@ void MainWindow::setMultiplayer()
 {
     arcade = false; player = 1; game_time = 0;
     loadGame();
+    QMessageBox::information(this,"TURNO 1",  "PLAYER 1");
+    startGame();
 }
 
 ///         AÑADE OBJETOS SIN MOVIMIENTO         ///
@@ -490,17 +498,25 @@ void MainWindow::endOfGame()
         // abort
         restart();
     }*/
-    serial_timer->stop(); enemy_timer->stop(); seconds->stop();
-    int score = scene->getScore()*int(increment*game_time);
-    scene->pause();
-    QMessageBox::information(this,"SCORE",  QString().number(score));
-    if(arcade || (player == 2 && scene->getBlood()==0)){
-        ///FIN  DE JUEGO
+        /// PAUSA A TODO EN ESCENA
+    pause();
+
+    if(arcade){
+        /// FIN DE JUEGO ARCADE
+        score_player1 = scene->getScore()*int(increment*game_time);
+        QMessageBox::information(this,"SCORE",  QString().number(score_player1));
+        scene->restart();
+        comeBack();
+    }
+    else if(player == 2){
+        /// FIN DE JUEGO MULTIPLAYER
+        score_player2 = scene->getScore()*int(increment*game_time);
+        QMessageBox::information(this,"SCORE",  QString().number(score_player2));
         scene->restart();
         comeBack();
     }
     else{
-        ///REINICIO DE VALORES DE JUEGO
+        /// FIN DE JUEGO PLAYER 1
         player = 2;
         this->restart(player);
         QMessageBox::information(this,"TURNO 2",  "PLAYER 2");
@@ -510,13 +526,30 @@ void MainWindow::endOfGame()
 
 void MainWindow::setGameValues(int _blood, int _score, int _player, int _a1, int _a2, int _a3,bool _arcade)
 {
-    scene->setBlood(_blood);
-    scene->setScore(_score);
+    scene->setBlood(_blood); life_bar->setValue(_blood);
+    scene->setScore(_score); display_score->display(_score);
     player = _player;
     ammu1 = _a1;
     ammu2 = _a2;
     ammu3 = _a3;
     arcade = _arcade;
+    paused = false;
+}
+
+void MainWindow::setDefaultValues()
+{
+    scene->setBlood(100);
+    scene->setScore(0);
+    player = 1;
+    ammu1 = 10; display_ammo1->display(ammu1);
+    ammu2 = 10; display_ammo2->display(ammu2);
+    ammu3 = 10; display_ammo3->display(ammu3);
+    paused = false;
+    enable2Shot = true;
+
+
+
+
 }
 
 void MainWindow::addEnemy()

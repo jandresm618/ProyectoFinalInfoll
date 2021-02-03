@@ -30,24 +30,31 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    /// FUNCIONES DE PUERTO SERIAL
+        /// FUNCIONES DE PUERTO SERIAL
     void serialInit();
     void serialRead();
 
-    /// CARACTERISTICAS DE PANTALLA
+        /// CARACTERISTICAS DE PANTALLA
     void setDeskProperty(int w,int h);
 
+        /// FUNCIONES DE CARGA DE OBJETOS Y PRESENTACION
     void instanceItems();
     void hideItems();
     void addItems2Scene(int opc);
     void connectItems();
     void loadGame();
+    void startGame();
+        /// FUNCIONES CONTROL DEL JUEGO
+    void endOfGame();
+    void pause();
+    void start();
+    void restart(int player);
 
-    /// MODOS DE JUEGO
+        /// MODOS DE JUEGO
     void setArcade();
     void setMultiplayer();
 
-    /// SLOTS
+        /// SLOTS
     void comeBack();
     void moveObject();
     void addObjetoGrafico(QString ruta,int x,int y, int w, int h);
@@ -56,23 +63,22 @@ public:
     void addObjetoMovil2();
     void addObjetoMovil3();
     void secondsPlusPlus();
+    void addEnemy();
 
-    ///Eventos de Teclado
+        ///Eventos de Teclado
     void keyPressEvent(QKeyEvent *event);
-    ///Eventos del Mouse
+        ///Eventos del Mouse
     void mousePressEvent(QMouseEvent *event) ;
 
 
-
-    /// FUNCIONES DE PRUEBA
+        /// FUNCIONES AUXILIARES
     int sec2min(int _seconds,bool out);
     bool canShot(int limit);
-    void endOfGame();
     void setGameValues(int _blood, int _score, int _player, int _a1, int _a2, int _a3, bool _arcade);
-    void addEnemy();
-    void pause();
-    void start();
-    void restart(int player);
+    void setDefaultValues();
+
+
+        /// FUNCIONES DE PRUEBA
     void add();
     void imagen1();
     void imagen2();
@@ -107,14 +113,25 @@ private:
         /// ESCENARIO
     Escena_Juego *scene;
     QGraphicsView *view;
-
+        /// MEDIDAS DE ESCRITORIO
     int desk_widht,desk_height;
-    bool img = true;
-
+        /// VARIABLES DE PUERTO SERIAL
     bool serial_available = false;
     char serial_char;
     string serial_port = "/dev/ttyUSB0";
+
+        /// VARIABLES AUXILIARES
     QString time_format;
+    bool img = true;
+    int cont_aux = 0;
+
+        /// VARIABLES DE CONTROL
+    bool arcade = true;
+    bool paused = false;
+    int player = 1;
+    bool enable2Shot = true;
+    float increment = 1.3;
+    int score_player1 = 0,score_player2 = 0;
 
         ///POSICION DE PERSONAJE PRINCIPAL
     int x_sir = 0, y_sir = 500;
@@ -122,16 +139,11 @@ private:
     int ammu1 = 10, ammu2 = 10, ammu3 =  10;
         /// INDICADOR DE TIPO MOVIMIENTO
     int move1 = 1 , move2 = 1;
+        /// VALORES DE TIMERS
     int fs_time = 50, game_time = 0;
-    bool arcade = true;
-    bool paused = false;
     int time_enemys = 1500,time_seconds = 1000;
 
 
-    int player = 1;    
-    int cont_aux = 0;
-    bool enable2Shot = true;
-    float increment = 1.3;
 
 signals:
     void end();

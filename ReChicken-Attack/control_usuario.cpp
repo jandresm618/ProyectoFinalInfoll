@@ -91,6 +91,7 @@ void Control_Usuario::setArcade()
     arcade = true;
     showMainWindow();
     gameWindow->setArcade();
+    gameWindow->setDefaultValues();
 }
 
 void Control_Usuario::setMultiplayer()
@@ -98,4 +99,5 @@ void Control_Usuario::setMultiplayer()
     arcade = false;
     showMainWindow();
     gameWindow->setMultiplayer();
+    gameWindow->setDefaultValues();
 }
