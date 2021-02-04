@@ -5,14 +5,15 @@ Objeto_Movil::Objeto_Movil()
 
 }
 
-Objeto_Movil::Objeto_Movil(QString _ruta, int _x, int _y,int _xf,int _yf, int _w, int _h,int move) : Objeto_Grafico(_ruta,_x,_y,_w,_h)
+Objeto_Movil::Objeto_Movil(QString _ruta, int _x, int _y,int _xf,int _yf, int _w, int _h,int _move) : Objeto_Grafico(_ruta,_x,_y,_w,_h)
 {
     ///DECLARACION DE OBJETOS
     movimiento = new Movimiento(_x,_y,_xf,_yf);
     time_move = new QTimer;
+    move = _move;
 
     ///CONEXION DE SIGNAL & SLOT
-    switch (move) {
+    switch (_move) {
     case 1:
             ///Movimiento Parabolico
         connect(time_move,&QTimer::timeout,this,&Objeto_Movil::updatePos);
@@ -152,5 +153,20 @@ void Objeto_Movil::deleteObject()
 bool Objeto_Movil::getLado()
 {
     return movimiento->getLado();
+}
+
+int Objeto_Movil::getV0() const
+{
+    return v0;
+}
+
+int Objeto_Movil::getAngle() const
+{
+    return angle;
+}
+
+int Objeto_Movil::getMove() const
+{
+    return move;
 }
 

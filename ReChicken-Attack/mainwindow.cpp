@@ -110,7 +110,7 @@ void MainWindow::serialRead(){
 void MainWindow::comeBack()
 {
     ///ASIGNACION DE VALORES
-    this->hide();
+    this->hide();    
     this->parentWidget()->show();
 
 }
@@ -321,7 +321,7 @@ void MainWindow::connectItems()
 }
 
 ///         FUNCION QUE DISPONE LOS OBJETOS DEL JUEGO         ///
-void MainWindow::loadGame()
+void MainWindow::loadGameWigets()
 {
     int opc = 2;
     addItems2Scene(opc);
@@ -333,29 +333,51 @@ void MainWindow::loadGame()
 void MainWindow::startGame(QString title,QString text)
 {
         ///INICIALIZAR PARAMETROS
-    infoBox(title,text);
+    infoBox(title,text,"");
     paused = false;
     serialInit();
     serial_timer->start(fs_time);
     seconds->start(time_seconds);
-    if(arcade) enemy_timer->start(time_enemys);
+    if(arcade) enemy_timer->start(time_enemys/level);
 }
 
 
 ///         OPCION ARCADE         ///
-void MainWindow::setArcade()
+void MainWindow::setArcade(bool value)
 {
-    arcade = true; player = 1; game_time = 0;
-    loadGame();
-    startGame("NEW GAME","DO YOUR BEST.");
+    arcade = value; this->player = 1; this->game_time = 0;
 }
 
 ///         OPCION MULTIJUGADOR         ///
 void MainWindow::setMultiplayer()
 {
     arcade = false; player = 1; game_time = 0;
-    loadGame();
-    startGame("NEW GAME","DO YOUR BEST.");
+}
+
+bool MainWindow::saveMatchData()
+{
+    // match_name, username, arcade, level , player, blood, game_time, score1, score2, ammo1,ammo2,ammo3
+    bool success = false;
+    if(player == 1) score_1 = scene->getScore();
+    else if(player == 2) score_2 = scene->getScore();
+    success = database->insertarDatos(match_name,username,arcade,level,player,scene->getBlood()
+                                  ,game_time,score_1,score_2,ammu1,ammu2,ammu3);
+    return success;
+}
+
+bool MainWindow::saveListEnemies(vector<Objeto_Movil* > vec)
+{
+    bool success = true,success2 = true;
+    vector<Objeto_Movil* >::iterator it;
+    for(it = vec.begin();it != vec.end(); it++){
+        /// SI ES ENEMIGO
+        if(!(*it)->getLado()){
+            success = database->insertarEnemigos(match_name,(*it)->getX(),(*it)->getY(),(*it)->getV0(),
+                                       (*it)->getAngle(),(*it)->getMove());
+            if(!success) success2 = false;
+        }
+    }
+    return success2;
 }
 
 ///         AÑADE OBJETOS SIN MOVIMIENTO         ///
@@ -381,6 +403,8 @@ void MainWindow::addObjetoMovil(QString ruta, int xo, int yo, int xf, int yf, in
 ///         EVENTOS DE TECLADO         ///
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
+    int save = 0;
+    bool success = false;
     if(event->key() == Qt::Key_Space ){
         //qDebug()<<"\nAÑADIENDO OBJETO\n";
         if(!arcade){
@@ -424,6 +448,30 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         }
         else{
             this->pause();
+            save = question3Box("PAUSE","GAME PAUSE","CHOSE AN OPTION:","CONTINUE","SAVE","RESTART");
+            if(save == 1){
+                this->start();
+            }
+            else if(save == 2){
+                qDebug()<<"GUARDANDO PARTIDA";
+                success = saveListEnemies(scene->getObjetosMoviles());
+                if(success){
+                    success = saveMatchData();
+                    if(!success){
+                        infoBox("WARNING","CAN`T SAVE THE GAME","");this->start();
+                        }
+                    else{
+                        scene->restart();
+                        comeBack();
+                    }
+                }
+                else {infoBox("WARNING","CAN`T SAVE THE GAME","");this->start();}
+            }
+            else if(save == 3){
+                this->restart("RESTART","DO IT BETTER");
+            }
+            else this->start();
+
         }
     }
 }
@@ -544,9 +592,9 @@ void MainWindow::setDefaultValues()
     scene->setBlood(100);
     scene->setScore(0);
     player = 1;
-    ammu1 = 10; display_ammo1->display(ammu1);
-    ammu2 = 10; display_ammo2->display(ammu2);
-    ammu3 = 10; display_ammo3->display(ammu3);
+    ammu1 = 30/level; display_ammo1->display(ammu1);
+    ammu2 = 30/level; display_ammo2->display(ammu2);
+    ammu3 = 30/level; display_ammo3->display(ammu3);
     paused = false;
     enable2Shot = true;
 }
@@ -572,7 +620,8 @@ void MainWindow::start()
     paused = false;
     serial_timer->start(fs_time);
     seconds->start(time_seconds);
-    if(arcade) enemy_timer->start(time_enemys);
+    scene->start();
+    if(arcade) enemy_timer->start(time_enemys/level);
 }
 
 void MainWindow::restart(QString title,QString text)
@@ -607,10 +656,40 @@ bool MainWindow::questionBox(QString title, QString text, QString infoText, cons
     return option;
 }
 
-void MainWindow::infoBox(QString title, QString text)
+int MainWindow::question3Box(QString title, QString text, QString infoText, const char *_boton1, const char *_boton2, const char *_boton3)
+{
+    int option = 1;
+    msgBox->setWindowTitle(title);
+    msgBox->setText(text);
+    msgBox->setInformativeText(infoText);
+    msgBox->setGeometry((desk_widht/2)-100,(2*desk_height/3)-100,300,400);
+    QPushButton *menuButton = msgBox->addButton(tr(_boton1), QMessageBox::ActionRole);
+    QPushButton *restartButton = msgBox->addButton(tr(_boton2),QMessageBox::ActionRole);
+    QPushButton *restart2Button = msgBox->addButton(tr(_boton3),QMessageBox::ActionRole);
+    msgBox->exec();
+    if (msgBox->clickedButton() == menuButton) {
+        // FALSE -> OPCION 1
+        option = 1;
+    } else if (msgBox->clickedButton() == restartButton) {
+        // TRUE -> OPCION 2
+        option = 2;
+    }
+    else if (msgBox->clickedButton() == restart2Button) {
+            // TRUE -> OPCION 2
+            option = 3;
+        }
+    msgBox->removeButton(menuButton);msgBox->removeButton(restartButton);
+    msgBox->removeButton(restart2Button);
+    delete menuButton; delete restartButton; delete restart2Button;
+    //msgBox->hide();
+    return option;
+}
+
+void MainWindow::infoBox(QString title, QString text,QString infoText)
 {
     msgBox->setWindowTitle(title);
     msgBox->setText(text);
+    msgBox->setInformativeText(infoText);
     msgBox->setGeometry((desk_widht/2)-100,(2*desk_height/3)-100,300,700);
     msgBox->exec();
     //msgBox->removeButton(msgBox->buttons().at(0));
@@ -676,6 +755,46 @@ void MainWindow::imagen2()
 void MainWindow::setPosSir(int x, int y)
 {
     x_sir = x; y_sir = y;
+}
+
+bool MainWindow::getArcade() const
+{
+    return arcade;
+}
+
+int MainWindow::getPlayer() const
+{
+    return player;
+}
+
+int MainWindow::getGame_time() const
+{
+    return game_time;
+}
+
+void MainWindow::setGame_time(int value)
+{
+    game_time = value;
+}
+
+void MainWindow::setLevel(int value)
+{
+    level = value;
+}
+
+void MainWindow::setDatabase(DataBase *value)
+{
+    database = value;
+}
+
+void MainWindow::setMatch_name(const QString &value)
+{
+    match_name = value;
+}
+
+void MainWindow::setUsername(const QString &value)
+{
+    username = value;
 }
 
 

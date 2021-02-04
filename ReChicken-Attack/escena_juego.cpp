@@ -184,6 +184,11 @@ void Escena_Juego::setScorePlus()
     score ++;
 }
 
+vector<Objeto_Movil *> Escena_Juego::getObjetosMoviles() const
+{
+    return objetosMoviles;
+}
+
 int Escena_Juego::getBlood() const
 {
     return blood;

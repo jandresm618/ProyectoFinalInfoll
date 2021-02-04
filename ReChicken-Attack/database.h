@@ -8,6 +8,7 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 #include <QMessageBox>
+#include "objeto_movil.h"
 
 
 class DataBase
@@ -19,16 +20,17 @@ public:
     //CREAR TABLAS
     void crearTabladeUsuarios();
     void crearTabladeDatos();
+    void crearTabladeEnemigos();
     void crearTabladeRecords();
 
     //INSERTAR VALORES A LAS TABLAS
     void insertarUsuario();
     void insertarUsuario(QString user, QString pass);
-    void insertarDatos();
-    void insertarDatos(QString name, QString user, QString turno, QString level, QString vida,
-                       QString score, QString num_jug, QString score_2, QString score_3, QString score_4);
-    void insertarDatos(QString name, QString user, int turno, int level, int vida, int score,
-                                 int num_jug, int score_2, int score_3, int score_4);
+    bool insertarDatos(QString match_name, QString username, bool arcade, int nivel, int player,
+                       int blood, int gameTime, int score_1, int score_2, int ammo1,
+                       int ammo2, int ammo3);
+    bool insertarEnemigos(QString match_name, int x, int y, int v0, int angle, int move);
+
     void insertarRecord();
     void insertarRecord(QString name, QString high_score);
 

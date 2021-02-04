@@ -12,6 +12,7 @@ DataBase::DataBase()
 
     crearTabladeUsuarios();
     crearTabladeDatos();
+    crearTabladeEnemigos();
     crearTabladeRecords();
     mostrarUsuarios();
 
@@ -47,23 +48,49 @@ void DataBase::crearTabladeDatos()
                     "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     "nombre VARCHAR(100),"
                     "user VARCHAR(100),"
-                    "turno INTEGER,"
+                    "arcade BIT,"
                     "nivel INTEGER,"
-                    "vida_uno INTEGER,"
+                    "turno INTEGER,"
+                    "vida INTEGER,"
+                    "segundos INTEGER,"
                     "score_uno INTEGER,"
-                    "num_jugadores INTEGER,"
                     "score_dos INTEGER,"
-                    "score_tres INTEGER,"
-                    "score_cuatro INTEGER"
+                    "ammo_uno INTEGER,"
+                    "ammo_dos INTEGER,"
+                    "ammo_tres INTEGER"
 
                     ");");
     QSqlQuery crear;
     crear.prepare(consulta);
     if(crear.exec()){
-        qDebug()<<"Se ha creado la tabla de usuarios.";
+        qDebug()<<"Se ha creado la tabla de DATOS.";
     }
     else{
-        qDebug()<<"No se ha creado la tabla de usuarios.";
+        qDebug()<<"No se ha creado la tabla de DATOS.";
+        qDebug()<<"ERROR"<<crear.lastError();
+    }
+}
+
+void DataBase::crearTabladeEnemigos()
+{
+    //Name-Vida-Score-Num_jug-turno
+    QString consulta;
+    consulta.append("CREATE TABLE IF NOT EXISTS enemy("
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "nombre VARCHAR(100),"
+                    "x INTEGER,"
+                    "y INTEGER,"
+                    "vo INTEGER,"
+                    "angulo INTEGER,"
+                    "move INTEGER"
+                    ");");
+    QSqlQuery crear;
+    crear.prepare(consulta);
+    if(crear.exec()){
+        qDebug()<<"Se ha creado la tabla de ENEMIGOS.";
+    }
+    else{
+        qDebug()<<"No se ha creado la tabla de ENEMIGOS.";
         qDebug()<<"ERROR"<<crear.lastError();
     }
 }
@@ -134,132 +161,85 @@ void DataBase::insertarUsuario(QString user, QString passw)
     }
 
 }
-void DataBase::insertarDatos()
+bool DataBase::insertarDatos(QString match_name,QString username,bool arcade,int nivel,int player,int blood,int gameTime,int score_1,int score_2,int ammo1,int ammo2,int ammo3)
 {
-    QString default_name="arcade";
-    QString default_user="javier";
-    int turno=1;
-    int nivel=1;
-    int vida=100;
-    int score=0;
-    int num_pla=1;
-    int score_2=0;
-    int score_3=0;
-    int score_4=0;
+    bool success = false;
     QString consulta;
     consulta.append("INSERT INTO data("
                     "nombre ,"
                     "user ,"
-                    "turno ,"
+                    "arcade ,"
                     "nivel ,"
-                    "vida_uno ,"
+                    "turno ,"
+                    "vida ,"
+                    "segundos ,"
                     "score_uno ,"
-                    "num_jugadores ,"
                     "score_dos ,"
-                    "score_tres ,"
-                    "score_cuatro "
+                    "ammo_uno ,"
+                    "ammo_dos ,"
+                    "ammo_tres "
                     ")"
                     "VALUES("
-                    "'"+default_name+"',"
-                    "'"+default_user+"',"
-                    "'"+turno+"',"
-                    "'"+nivel+"',"
-                    "'"+vida+"',"
-                    "'"+score+"',"
-                    "'"+num_pla+"',"
-                    "'"+score_2+"',"
-                    "'"+score_3+"',"
-                    "'"+score_4+"'"
+                    "'"+match_name+"',"
+                    "'"+username+"',"
+                    "'"+QString::number(arcade)+"',"
+                    "'"+QString::number(nivel)+"',"
+                    "'"+QString::number(player)+"',"
+                    "'"+QString::number(blood)+"',"
+                    "'"+QString::number(gameTime)+"',"
+                    "'"+QString::number(score_1)+"',"
+                    "'"+QString::number(score_2)+"',"
+                    "'"+QString::number(ammo1)+"',"
+                    "'"+QString::number(ammo2)+"',"
+                    "'"+QString::number(ammo3)+"'"
                     ")");
     QSqlQuery insertar;
     qDebug()<<consulta;
     insertar.prepare(consulta);
     if(insertar.exec()){
-        qDebug()<<"Se ha ingresado el usuario correctamente.";
+        success = true;
+        qDebug()<<"Se ha ingresado los DATOS correctamente.";
     }
     else {
         qDebug()<<"El usuario no se ha ingresado";
         qDebug()<<"ERROR!"<<insertar.lastError();
     }
-}
-void DataBase::insertarDatos(QString name, QString user, int turno, int level, int vida, int score,
-                             int num_jug, int score_2, int score_3, int score_4)
-{
-    QString consulta;
-    consulta.append("INSERT INTO data("
-                    "nombre ,"
-                    "user ,"
-                    "turno ,"
-                    "nivel ,"
-                    "vida_uno ,"
-                    "score_uno ,"
-                    "num_jugadores ,"
-                    "score_dos ,"
-                    "score_tres ,"
-                    "score_cuatro "
-                    ")"
-                    "VALUES("
-                    "'"+name+"',"
-                    "'"+user+"',"
-                    "'"+QString::number(turno)+"',"
-                    "'"+QString::number(level)+"',"
-                    "'"+QString::number(vida)+"',"
-                    "'"+QString::number(score)+"',"
-                    "'"+QString::number(num_jug)+"',"
-                    "'"+QString::number(score_2)+"',"
-                    "'"+QString::number(score_3)+"',"
-                    "'"+QString::number(score_4)+"'"
-                    ");");
-    QSqlQuery insertar;
-    qDebug()<<consulta;
-    insertar.prepare(consulta);
-    if(insertar.exec()){
-        qDebug()<<"Se ha ingresado el usuario correctamente.";
-    }
-    else {
-        qDebug()<<"El usuario no se ha ingresado";
-        qDebug()<<"ERROR!"<<insertar.lastError();
-    }
+    return success;
 }
 
-void DataBase::insertarDatos(QString name, QString user, QString turno, QString level, QString vida, QString score,
-                             QString num_jug, QString score_2, QString score_3, QString score_4)
+bool DataBase::insertarEnemigos(QString match_name,int x, int y, int v0,int angle,int move)
 {
+    bool success = false;
     QString consulta;
-    consulta.append("INSERT INTO data("
+
+    consulta.append("INSERT INTO enemy("
                     "nombre ,"
-                    "user ,"
-                    "turno ,"
-                    "nivel ,"
-                    "vida_uno ,"
-                    "score_uno ,"
-                    "num_jugadores ,"
-                    "score_dos ,"
-                    "score_tres ,"
-                    "score_cuatro "
+                    "x ,"
+                    "y ,"
+                    "vo ,"
+                    "angulo ,"
+                    "move "
                     ")"
                     "VALUES("
-                    "'"+name+"',"
-                    "'"+user+"',"
-                    "'"+turno+"',"
-                    "'"+level+"',"
-                    "'"+vida+"',"
-                    "'"+score+"',"
-                    "'"+num_jug+"',"
-                    "'"+score_2+"',"
-                    "'"+score_3+"',"
-                    "'"+score_4+"'"
-                    ");");
+                    "'"+match_name+"',"
+                    "'"+QString::number(x)+"',"
+                    "'"+QString::number(y)+"',"
+                    "'"+QString::number(v0)+"',"
+                    "'"+QString::number(angle)+"',"
+                    "'"+QString::number(move)+"'"
+                    ")");
     QSqlQuery insertar;
     qDebug()<<consulta;
     insertar.prepare(consulta);
     if(insertar.exec()){
-        qDebug()<<"Se ha ingresado el usuario correctamente.";
+        qDebug()<<"Se ha ingresado los ENEMIGOS correctamente.";
+        success = true;
     }
     else {
         qDebug()<<"El usuario no se ha ingresado";
         qDebug()<<"ERROR!"<<insertar.lastError();
     }
+    return success;
 }
 
 

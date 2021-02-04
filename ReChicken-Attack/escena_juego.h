@@ -53,8 +53,10 @@ public:
     void setScorePlus();
 
 
+    vector<Objeto_Movil *> getObjetosMoviles() const;
+
 private:
-        /// APUNTADOR A OBJETOS GRAFICOS
+    /// APUNTADOR A OBJETOS GRAFICOS
     Objeto_Grafico *personaje;
     Objeto_Movil *muni;
 

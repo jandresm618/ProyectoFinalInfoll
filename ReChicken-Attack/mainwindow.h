@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "escena_juego.h"
+#include "database.h"
 
 
 
@@ -42,19 +43,25 @@ public:
     void hideItems();
     void addItems2Scene(int opc);
     void connectItems();
-    void loadGame();
+    void loadGameWigets();
     void startGame(QString title,QString text);
         /// FUNCIONES CONTROL DEL JUEGO
     void endOfGame();
     void pause();
     void start();
     void restart(QString title,QString text);
-    bool questionBox(QString title,  QString text,QString infoText, const char *_boton1, const char *_boton2);
-    void infoBox(QString title,QString text);
+    bool questionBox(QString title,  QString text,QString infoText,
+                     const char *_boton1, const char *_boton2);
+    int question3Box(QString title,  QString text,QString infoText,
+                     const char *_boton1, const char *_boton2,const char *_boton3);
+    void infoBox(QString title, QString text, QString infoText);
 
         /// MODOS DE JUEGO
-    void setArcade();
     void setMultiplayer();
+
+        /// FUNCIONES DE GUARDADO
+    bool saveMatchData();
+    bool saveListEnemies(vector<Objeto_Movil *> vec);
 
         /// SLOTS
     void comeBack();
@@ -86,9 +93,26 @@ public:
     void imagen2();
     void setPosSir(int x, int y);
 
+    bool getArcade() const;
+    void setArcade(bool value);
+
+    int getPlayer() const;
+
+    int getGame_time() const;
+    void setGame_time(int value);
+
+    void setLevel(int value);
+
+    void setDatabase(DataBase *value);
+
+    void setMatch_name(const QString &value);
+
+    void setUsername(const QString &value);
+
 private:
     Ui::MainWindow *ui;
 
+    DataBase *database;
     QMessageBox *msgBox;
         /// OBJETO PUERTO SERIAL
     QSerialPort serial;
@@ -130,12 +154,14 @@ private:
     int cont_aux = 0;
 
         /// VARIABLES DE CONTROL
+    QString match_name,username;
     bool arcade = true;
     bool paused = false;
     int player = 1;
     bool enable2Shot = true;
     float increment = 1.3;
     int score_player1 = 0,score_player2 = 0;
+    int score_1 = 0,score_2 = 0;
 
         ///POSICION DE PERSONAJE PRINCIPAL
     int x_sir = 0, y_sir = 500;
@@ -146,6 +172,7 @@ private:
         /// VALORES DE TIMERS
     int fs_time = 50, game_time = 0;
     int time_enemys = 1500,time_seconds = 1000;
+    int level = 1;
 
 
 

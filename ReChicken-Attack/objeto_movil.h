@@ -11,7 +11,7 @@ class Objeto_Movil:public QObject, public Objeto_Grafico
     Q_OBJECT
 public:
     Objeto_Movil();
-    Objeto_Movil(QString _ruta,int _x,int _y,int _xf,int _yf,int _w,int _h,int move);
+    Objeto_Movil(QString _ruta, int _x, int _y, int _xf, int _yf, int _w, int _h, int _move);
     ~Objeto_Movil();
 
     //PROPIEDADES DE VISUALIZACION
@@ -37,6 +37,12 @@ public:
 
     bool getLado();
 
+    int getV0() const;
+
+    int getAngle() const;
+
+    int getMove() const;
+
 private:
     Movimiento *movimiento;
 
@@ -46,6 +52,7 @@ private:
     int v0 = 0, angle = 0; //Variables de Movimiento
     float factorImpacto = 0.05; //Porcentaje de Error en el impacto
     bool outOfScene = false;
+    int move = 0;
 
 signals:
     void outScene();

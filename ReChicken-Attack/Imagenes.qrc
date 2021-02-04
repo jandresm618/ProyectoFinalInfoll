@@ -1,13 +1,9 @@
 <RCC>
     <qresource prefix="/personajes">
-        <file>imagenes/Arcade.png</file>
         <file>imagenes/ARCADE.png</file>
         <file>imagenes/BACK.png</file>
-        <file>imagenes/Bala1.png</file>
         <file>imagenes/Bala2.png</file>
         <file>imagenes/BLOOD.png</file>
-        <file>imagenes/bullet.png</file>
-        <file>imagenes/BULLET.png</file>
         <file>imagenes/BULLETS.png</file>
         <file>imagenes/cancel.png</file>
         <file>imagenes/CANCEL.png</file>
@@ -15,31 +11,22 @@
         <file>imagenes/DIFICULT.png</file>
         <file>imagenes/done.png</file>
         <file>imagenes/DONE.png</file>
-        <file>imagenes/exit.png</file>
         <file>imagenes/EXIT.png</file>
         <file>imagenes/explode.png</file>
         <file>imagenes/fondo.png</file>
         <file>imagenes/GIFT.png</file>
-        <file>imagenes/index.png</file>
         <file>imagenes/intro.png</file>
         <file>imagenes/life.png</file>
         <file>imagenes/LIFE.png</file>
-        <file>imagenes/Load.png</file>
         <file>imagenes/LOAD GAME.png</file>
         <file>imagenes/LOG IN.png</file>
-        <file>imagenes/mario.png</file>
         <file>imagenes/MATCH NAME.png</file>
         <file>imagenes/MENU.png</file>
         <file>imagenes/mira.png</file>
-        <file>imagenes/mira1.png</file>
-        <file>imagenes/multiplayer.png</file>
         <file>imagenes/MULTIPLAYER.png</file>
         <file>imagenes/new.png</file>
-        <file>imagenes/NEW USER.png</file>
-        <file>imagenes/nick.png</file>
         <file>imagenes/nickname.png</file>
         <file>imagenes/NICKNAME.png</file>
-        <file>imagenes/OLD USER.png</file>
         <file>imagenes/password.png</file>
         <file>imagenes/PASSWORD.png</file>
         <file>imagenes/PLAYERS.png</file>
