@@ -252,6 +252,31 @@ void Control_Usuario::setMatchNameWindow()
 
 }
 
+void Control_Usuario::loadGame()
+{
+    ///CONEXION DE SIGNAL & SLOT
+    disconnectAll();
+    hideItems();
+    label1->setGeometry((2*desk_width/3)-80,(3*desk_height/5),280,130);
+    label1->setStyleSheet("border-image:url(:/personajes/imagenes/MATCH NAME.png);");
+    label1->show();
+
+    line_Edit1->setGeometry((2*desk_width/3)+200,(3*desk_height/5),200,70);
+    line_Edit1->setStyleSheet("border-image:url(:/personajes/imagenes/index.png);");
+    line_Edit1->setText("");
+    line_Edit1->show();
+
+    boton1->setGeometry((2*desk_width/3),desk_height-200,200,100);
+    boton1->setStyleSheet("border-image:url(:/personajes/imagenes/BACK.png);");
+    boton1->show();
+    boton2->setGeometry((2*desk_width/3)+250,desk_height-200,200,100);
+    boton2->setStyleSheet("border-image:url(:/personajes/imagenes/DONE.png);");
+    boton2->show();
+
+    connect(boton1,&QPushButton::clicked,this,&Control_Usuario::setMenuWindow);
+    connect(boton2,&QPushButton::clicked,this,&Control_Usuario::loadDataGame);
+}
+
 void Control_Usuario::keyPressEvent(QKeyEvent *event)
 {
     if(event->key() == Qt::Key_Enter ){
@@ -263,7 +288,6 @@ void Control_Usuario::keyPressEvent(QKeyEvent *event)
 ///     FUNCION INICIAR JUEGO       ///
 void Control_Usuario::showMainWindow()
 {
-
     gameWindow->show();
     this->hide();
 }
@@ -370,10 +394,17 @@ void Control_Usuario::startGame()
 void Control_Usuario::loadDataGame()
 {
     vector<QString> data,enemys;
+    QString match_n = line_Edit1->text();
     data = database->mostrarDatos("terceraV",user_name);
     enemys = database->mostrarEnemigos("terceraV",user_name);
-    gameWindow->loadData(data);
-    gameWindow->loadEnemys(enemys);
+    if(!data.empty() && !enemys.empty()){
+        showMainWindow();
+        gameWindow->loadGame(data,enemys);
+    }
+    else{
+        /// PROBLEMAS AL CARGAR PARTIDA
+        qDebug()<<"NO SE HA PODIDO CARGAR LA PARTIDA";
+    }
 }
 
 void Control_Usuario::printVector(vector<QString> vec)

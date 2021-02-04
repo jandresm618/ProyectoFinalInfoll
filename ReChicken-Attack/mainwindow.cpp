@@ -328,8 +328,6 @@ void MainWindow::loadGameWigets()
     int opc = 2;
     addItems2Scene(opc);
     connectItems();
-
-
 }
 
 void MainWindow::startGame(QString title,QString text)
@@ -342,6 +340,16 @@ void MainWindow::startGame(QString title,QString text)
     seconds->start(time_seconds);
     //timer->start(200);
     if(arcade) enemy_timer->start(time_enemys/level);
+}
+
+void MainWindow::loadGame(vector<QString> data, vector<QString> enemys)
+{
+    loadData(data);
+    loadEnemys(enemys);
+    loadGameWigets();
+    connectItems();
+    startGame("GAME LOADED","DO IT BETTER");
+    scene->start();
 }
 
 
@@ -389,7 +397,7 @@ void MainWindow::loadData(vector<QString> data)
     arcade = data.at(0).toInt(); qDebug()<<"Arcade "<<arcade;
     level = data.at(1).toInt();  qDebug()<<"Nivel "<<level;
     player = data.at(2).toInt();  qDebug()<<"Turno "<<player;
-    cont = data.at(3).toInt();  qDebug()<<"BLood "<<cont;
+    cont = data.at(3).toInt();  qDebug()<<"BLood "<<cont;    
     game_time = data.at(4).toInt();  qDebug()<<"game_time "<<game_time;
     score_1 = data.at(5).toInt();  qDebug()<<"score1 "<<score_1;
     score_2 = data.at(6).toInt();  qDebug()<<"score2 "<<score_2;
@@ -407,6 +415,7 @@ void MainWindow::loadEnemys(vector<QString> enemys)
         _v0 = enemys.at(i+2).toInt(); qDebug()<<"v0 "<<_v0;
         _angle = enemys.at(i+3).toInt(); qDebug()<<"angle "<<_angle;
         _move = enemys.at(i+4).toInt(); qDebug()<<"move "<<_move;
+        addObjetoMovil(enemy_path,_x,_y,_v0,_angle,_move);
     }
 }
 
@@ -421,6 +430,11 @@ void MainWindow::addObjetoGrafico(QString ruta, int x, int y, int w, int h)
 void MainWindow::addObjetoMovil(QString ruta, int xo, int yo, int xf, int yf, int w, int h, int _move)
 {
     scene->addObjetoMovil(ruta,xo,yo,xf,yf,w,h,_move);
+}
+
+void MainWindow::addObjetoMovil(QString ruta, int xo, int yo, int v0, int angle, int _move)
+{
+    scene->addObjetoMovil(ruta,xo,yo,v0,angle,_move);
 }
 
 

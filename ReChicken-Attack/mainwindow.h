@@ -45,6 +45,8 @@ public:
     void connectItems();
     void loadGameWigets();
     void startGame(QString title,QString text);
+    void loadGame(vector<QString> data, vector<QString> enemys);
+
         /// FUNCIONES CONTROL DEL JUEGO
     void endOfGame();
     void pause();
@@ -70,6 +72,7 @@ public:
     void moveObject();
     void addObjetoGrafico(QString ruta,int x,int y, int w, int h);
     void addObjetoMovil(QString ruta,int xo,int yo,int xf,int yf,int w,int h,int _move);
+    void addObjetoMovil(QString ruta,int xo,int yo,int v0,int angle,int _move);
     void addObjetoMovil1();
     void addObjetoMovil2();
     void addObjetoMovil3();
@@ -165,6 +168,7 @@ private:
 
         /// VARIABLES DE CONTROL
     QString match_name,username;
+    QString enemy_path = ":/personajes/imagenes/pollo2.png";
     bool arcade = true;
     bool paused = false;
     int player = 1;

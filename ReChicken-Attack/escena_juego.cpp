@@ -77,6 +77,17 @@ void Escena_Juego::addObjetoMovil(QString ruta, int x, int y,int xf,int yf, int 
     muni->startMove(time_move);                //Asigna valor de timeout para el movimiento
 }
 
+void Escena_Juego::addObjetoMovil(QString ruta, int x, int y, int v0, int angle, int move)
+{
+    ///CREACION DE OBJETO MOVIL
+    muni = new Objeto_Movil(ruta,x,y,0,500,100,100,move);
+    objetosMoviles.push_back(muni);     //Añadir objeto a la lista de objetos moviles
+    muni->setVel(v0,angle);
+
+    /// INICIALIZACION DE OBJETO EN ESCENA
+    this->addItem(muni);                //Se añade el objeto a la escena
+}
+
 void Escena_Juego::explodeObject(int _x, int _y, int _w, int _h)
 {
     muni = new Objeto_Movil(":/personajes/imagenes/explode.png",_x,_y,_w,_h);

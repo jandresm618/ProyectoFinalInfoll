@@ -34,6 +34,7 @@ public:
     void recordsWindow();
     void setMatchNameWindow();
     void matchNameWindow();
+    void loadGame();
 
 
     ///Eventos de Teclado
