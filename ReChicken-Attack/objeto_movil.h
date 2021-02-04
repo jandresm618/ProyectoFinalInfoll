@@ -12,6 +12,7 @@ class Objeto_Movil:public QObject, public Objeto_Grafico
 public:
     Objeto_Movil();
     Objeto_Movil(QString _ruta, int _x, int _y, int _xf, int _yf, int _w, int _h, int _move);
+    Objeto_Movil(QString _ruta, int _x, int _y, int _w, int _h);
     ~Objeto_Movil();
 
     //PROPIEDADES DE VISUALIZACION
@@ -30,6 +31,7 @@ public:
     void updatePos2();
     void updatePos3();
     void stop();
+    void changeSize();
 
 
     bool getOutOfScene() const;
@@ -53,6 +55,7 @@ private:
     float factorImpacto = 0.05; //Porcentaje de Error en el impacto
     bool outOfScene = false;
     int move = 0;
+    int cont = 1;
 
 signals:
     void outScene();

@@ -29,7 +29,7 @@ public:
     bool insertarDatos(QString match_name, QString username, bool arcade, int nivel, int player,
                        int blood, int gameTime, int score_1, int score_2, int ammo1,
                        int ammo2, int ammo3);
-    bool insertarEnemigos(QString match_name, int x, int y, int v0, int angle, int move);
+    bool insertarEnemigos(QString match_name, QString username, int x, int y, int v0, int angle, int move);
 
     void insertarRecord();
     void insertarRecord(QString name, QString high_score);
@@ -37,7 +37,8 @@ public:
     //MUESTRA CON QDEBUG LOS DATOS EN LAS TABLAS
 
     void mostrarUsuarios();
-    void mostrarDatos();
+    vector<QString> mostrarDatos(QString match_name, QString username);
+    vector<QString> mostrarEnemigos(QString match_name, QString username);
     void mostrarRecord();
 
     //VERIFICA QUE LOS DATOS ESTEN O NO

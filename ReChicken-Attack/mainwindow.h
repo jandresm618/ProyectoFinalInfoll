@@ -62,6 +62,8 @@ public:
         /// FUNCIONES DE GUARDADO
     bool saveMatchData();
     bool saveListEnemies(vector<Objeto_Movil *> vec);
+    void loadData(vector<QString> data);
+    void loadEnemys(vector<QString> enemys);
 
         /// SLOTS
     void comeBack();
@@ -89,6 +91,10 @@ public:
 
         /// FUNCIONES DE PRUEBA
     void add();
+    void cambiofondo();
+    void actualizarcronometro();
+    void Estado();
+
     void imagen1();
     void imagen2();
     void setPosSir(int x, int y);
@@ -138,6 +144,9 @@ private:
     QTimer *serial_timer;
     QTimer *enemy_timer;
     QTimer *seconds;
+    QTimer *timer;
+
+
         /// ESCENARIO
     Escena_Juego *scene;
     QGraphicsView *view;
@@ -152,6 +161,7 @@ private:
     QString time_format;
     bool img = true;
     int cont_aux = 0;
+    int cont=1;
 
         /// VARIABLES DE CONTROL
     QString match_name,username;

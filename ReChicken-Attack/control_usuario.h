@@ -48,6 +48,9 @@ public:
     void validateUser();
     void createUser();
     void startGame();
+    void loadDataGame();
+
+    void printVector(vector<QString> vec);
 
 
 

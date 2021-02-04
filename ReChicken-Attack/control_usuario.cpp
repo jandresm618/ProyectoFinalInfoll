@@ -140,6 +140,7 @@ void Control_Usuario::setCredentialsWindow()
     label1->show();
 
     line_Edit1->setGeometry((2*desk_width/3)+200,(desk_height/5),200,70);
+    line_Edit1->setStyleSheet("border-image:url(:/personajes/imagenes/index.png);");
     line_Edit1->show();
 
     label2->setGeometry((2*desk_width/3),(2*desk_height/5),200,100);
@@ -147,6 +148,7 @@ void Control_Usuario::setCredentialsWindow()
     label2->show();
 
     line_Edit2->setGeometry((2*desk_width/3)+200,(2*desk_height/5),200,70);
+    line_Edit2->setStyleSheet("border-image:url(:/personajes/imagenes/index.png);");
     line_Edit2->show();
 
     if(newUser){
@@ -154,6 +156,7 @@ void Control_Usuario::setCredentialsWindow()
         label3->setStyleSheet("border-image:url(:/personajes/imagenes/PASSWORD.png);");
         label3->show();
         line_Edit3->setGeometry((2*desk_width/3)+200,(3*desk_height/5),200,70);
+        line_Edit3->setStyleSheet("border-image:url(:/personajes/imagenes/index.png);");
         line_Edit3->show();
     }
     boton1->setGeometry((2*desk_width/3),desk_height-200,200,100);
@@ -207,7 +210,7 @@ void Control_Usuario::setMenuWindow()
     ///CONEXION DE SIGNAL & SLOT
     connect(boton1,&QPushButton::clicked,this,&Control_Usuario::setArcade);
     connect(boton2,&QPushButton::clicked,this,&Control_Usuario::setMultiplayer);
-    connect(boton3,&QPushButton::clicked,this,&Control_Usuario::setMultiplayer);
+    connect(boton3,&QPushButton::clicked,this,&Control_Usuario::loadDataGame);
     connect(boton4,&QPushButton::clicked,this,&Control_Usuario::setMultiplayer);
     connect(boton5,&QPushButton::clicked,this,&Control_Usuario::setMultiplayer);
 }
@@ -222,6 +225,8 @@ void Control_Usuario::setMatchNameWindow()
     label1->show();
 
     line_Edit1->setGeometry((2*desk_width/3)+200,(2*desk_height/5),200,70);
+    line_Edit1->setStyleSheet("border-image:url(:/personajes/imagenes/index.png);");
+    line_Edit1->setText("");
     line_Edit1->show();
     if(arcade){
         label2->setGeometry((2*desk_width/3),(4*desk_height/5)-200,200,100);
@@ -229,6 +234,7 @@ void Control_Usuario::setMatchNameWindow()
         label2->show();
 
         spin_box1->setGeometry((2*desk_width/3)+200,(4*desk_height/5)-200,100,60);
+        spin_box1->setStyleSheet("border-image:url(:/personajes/imagenes/index.png);");
         spin_box1->show();
         spin_box1->setRange(1,3);
         spin_box1->setValue(1);
@@ -294,14 +300,11 @@ void Control_Usuario::signIn()
 
 void Control_Usuario::validateUser()
 {
-    qDebug()<<"Pushed";
     bool proced = false;
     QString username = line_Edit1->text();
     QString password1 = line_Edit2->text();
     QString password2 = line_Edit3->text();
-    qDebug()<<username;
-    qDebug()<<password1;
-    qDebug()<<password2;
+
     bool validate;
     if(username != ""){
         /// VALIDAR QUE EL USUARIO EXISTA Y LAS CONTRASEÑAS COINCIDAN
@@ -344,7 +347,8 @@ void Control_Usuario::createUser()
 
 void Control_Usuario::startGame()
 {
-    int level = spin_box1->value();
+    int level = 1;
+    if(arcade) level = spin_box1->value();
     QString match_name = line_Edit1->text();
     if(database->validarMatchName(match_name)){
         qDebug()<<"NOMBRE VALIDO";
@@ -361,4 +365,23 @@ void Control_Usuario::startGame()
         qDebug()<<"NOMBRE NO VALIDO";
     }
 
+}
+
+void Control_Usuario::loadDataGame()
+{
+    vector<QString> data,enemys;
+    data = database->mostrarDatos("terceraV",user_name);
+    enemys = database->mostrarEnemigos("terceraV",user_name);
+    gameWindow->loadData(data);
+    gameWindow->loadEnemys(enemys);
+}
+
+void Control_Usuario::printVector(vector<QString> vec)
+{
+    vector<QString>::iterator it;
+    if(!vec.empty()){
+        for(it = vec.begin(); it !=  vec.end();it++){
+            qDebug()<<"-> "<<(*it);
+        }
+    }
 }

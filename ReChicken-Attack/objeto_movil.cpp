@@ -36,6 +36,14 @@ Objeto_Movil::Objeto_Movil(QString _ruta, int _x, int _y,int _xf,int _yf, int _w
 
 }
 
+Objeto_Movil::Objeto_Movil(QString _ruta, int _x, int _y, int _w, int _h): Objeto_Grafico(_ruta,_x,_y,_w,_h)
+{
+    movimiento = new Movimiento;
+    time_move = new QTimer;
+    connect(time_move,&QTimer::timeout,this,&Objeto_Movil::changeSize);
+    time_move->start(250);
+}
+
 Objeto_Movil::~Objeto_Movil()
 {
     ///ELIMINACION DE MEMORIA
@@ -136,6 +144,34 @@ void Objeto_Movil::updatePos3()
 void Objeto_Movil::stop()
 {
     time_move->stop();
+}
+
+void Objeto_Movil::changeSize()
+{
+    switch (cont) {
+    case 1:
+        this->parentItem()->setScale(1.2);
+        break;
+    case 2:
+        this->parentItem()->setScale(1.4);
+        break;
+    case 3:
+        this->parentItem()->setScale(1.6);
+        break;
+    case 4:
+        this->parentItem()->setScale(0.8);
+        break;
+    case 5:
+        this->parentItem()->setScale(0.5);
+        break;
+    case 6:
+        delete this;
+        break;
+    default:
+        qDebug()<<"Algo anda mal";
+        break;
+    }
+    cont++;
 }
 
 bool Objeto_Movil::getOutOfScene() const

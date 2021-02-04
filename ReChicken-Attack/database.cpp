@@ -78,6 +78,7 @@ void DataBase::crearTabladeEnemigos()
     consulta.append("CREATE TABLE IF NOT EXISTS enemy("
                     "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     "nombre VARCHAR(100),"
+                    "user VARCHAR(100),"
                     "x INTEGER,"
                     "y INTEGER,"
                     "vo INTEGER,"
@@ -207,13 +208,14 @@ bool DataBase::insertarDatos(QString match_name,QString username,bool arcade,int
     return success;
 }
 
-bool DataBase::insertarEnemigos(QString match_name,int x, int y, int v0,int angle,int move)
+bool DataBase::insertarEnemigos(QString match_name,QString username,int x, int y, int v0,int angle,int move)
 {
     bool success = false;
     QString consulta;
 
     consulta.append("INSERT INTO enemy("
                     "nombre ,"
+                    "user ,"
                     "x ,"
                     "y ,"
                     "vo ,"
@@ -222,6 +224,7 @@ bool DataBase::insertarEnemigos(QString match_name,int x, int y, int v0,int angl
                     ")"
                     "VALUES("
                     "'"+match_name+"',"
+                    "'"+username+"',"
                     "'"+QString::number(x)+"',"
                     "'"+QString::number(y)+"',"
                     "'"+QString::number(v0)+"',"
@@ -315,10 +318,10 @@ void DataBase::mostrarUsuarios()
     //    }
 }
 
-void DataBase::mostrarDatos()
+vector<QString> DataBase::mostrarDatos(QString match_name,QString username)
 {
-    int i=0;
-    QString r;
+    QString r1,r2;
+    vector<QString> data;
     QString consulta;
     consulta.append("SELECT * FROM data"
                     );
@@ -332,19 +335,74 @@ void DataBase::mostrarDatos()
         qDebug()<<"ERROR!"<<mostrar.lastError();
     }
     while (mostrar.next()) {
-        qDebug()<<"nombre de partida"<<mostrar.value(1).toByteArray().constData();
-        qDebug()<<"usuario"<<mostrar.value(2).toByteArray().constData();
-        qDebug()<<"turno"<<mostrar.value(3).toByteArray().constData();
-        qDebug()<<"nivel"<<mostrar.value(4).toByteArray().constData();
-        qDebug()<<"vida"<<mostrar.value(5).toByteArray().constData();
-        r=mostrar.value(5).toByteArray().constData();
-        qDebug()<<"puntaje"<<mostrar.value(6).toByteArray().constData();
-        qDebug()<<"numero de jugadores"<<mostrar.value(7).toByteArray().constData();
-        qDebug()<<"score 2"<<mostrar.value(8).toByteArray().constData();
-        qDebug()<<"score 3"<<mostrar.value(9).toByteArray().constData();
-        qDebug()<<"score 4"<<mostrar.value(10).toByteArray().constData();
-        qDebug()<<"tatata"<<r.toInt()+20;
+        r1 = mostrar.value(1).toByteArray().constData();
+        r2 = mostrar.value(2).toByteArray().constData();
+        if((match_name == r1) && (username == r2)){
+            data.push_back(mostrar.value(3).toByteArray().constData());
+            data.push_back(mostrar.value(4).toByteArray().constData());
+            data.push_back(mostrar.value(5).toByteArray().constData());
+            data.push_back(mostrar.value(6).toByteArray().constData());
+            data.push_back(mostrar.value(7).toByteArray().constData());
+            data.push_back(mostrar.value(8).toByteArray().constData());
+            data.push_back(mostrar.value(9).toByteArray().constData());
+            data.push_back(mostrar.value(10).toByteArray().constData());
+            data.push_back(mostrar.value(11).toByteArray().constData());
+            data.push_back(mostrar.value(12).toByteArray().constData());
+
+            qDebug()<<"nombre de partida "<<mostrar.value(1).toByteArray().constData();
+            qDebug()<<"user "<<mostrar.value(2).toByteArray().constData();
+            qDebug()<<"arcade "<<mostrar.value(3).toByteArray().constData();
+            qDebug()<<"nivel "<<mostrar.value(4).toByteArray().constData();
+            qDebug()<<"turno "<<mostrar.value(5).toByteArray().constData();
+            qDebug()<<"vida "<<mostrar.value(6).toByteArray().constData();
+            qDebug()<<"segundos "<<mostrar.value(7).toByteArray().constData();
+            qDebug()<<" score_uno "<<mostrar.value(8).toByteArray().constData();
+            qDebug()<<"score_dos "<<mostrar.value(9).toByteArray().constData();
+            qDebug()<<"ammo_uno "<<mostrar.value(10).toByteArray().constData();
+            qDebug()<<"ammo_dos "<<mostrar.value(11).toByteArray().constData();
+            qDebug()<<"ammo_tres "<<mostrar.value(12).toByteArray().constData();
+        }
+
     }
+    return data;
+}
+
+vector<QString> DataBase::mostrarEnemigos(QString match_name, QString username)
+{
+    QString r1,r2;
+    vector<QString> enemys;
+    QString consulta;
+    consulta.append("SELECT * FROM enemy"
+                    );
+    QSqlQuery mostrar;
+    mostrar.prepare(consulta);
+    if(mostrar.exec()){
+        qDebug()<<"Se ha mostrado el usuario correctamente.";
+    }
+    else {
+        qDebug()<<"El usuario no se ha mostrado";
+        qDebug()<<"ERROR!"<<mostrar.lastError();
+    }
+    while (mostrar.next()) {
+        r1 = mostrar.value(1).toByteArray().constData();
+        r2 = mostrar.value(2).toByteArray().constData();
+        if((match_name == r1) && (username == r2)){
+            enemys.push_back(mostrar.value(3).toByteArray().constData());
+            enemys.push_back(mostrar.value(4).toByteArray().constData());
+            enemys.push_back(mostrar.value(5).toByteArray().constData());
+            enemys.push_back(mostrar.value(6).toByteArray().constData());
+            enemys.push_back(mostrar.value(7).toByteArray().constData());
+
+            qDebug()<<"nombre de partida "<<mostrar.value(1).toByteArray().constData();
+            qDebug()<<"user "<<mostrar.value(2).toByteArray().constData();
+            qDebug()<<"x "<<mostrar.value(3).toByteArray().constData();
+            qDebug()<<"y "<<mostrar.value(4).toByteArray().constData();
+            qDebug()<<"v0 "<<mostrar.value(5).toByteArray().constData();
+            qDebug()<<"angle "<<mostrar.value(6).toByteArray().constData();
+            qDebug()<<"move "<<mostrar.value(7).toByteArray().constData();
+        }
+    }
+    return enemys;
 }
 
 void DataBase::mostrarRecord()

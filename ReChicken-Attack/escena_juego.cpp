@@ -3,6 +3,7 @@
 ///         CONSTRUCTOR         ///
 Escena_Juego::Escena_Juego()
 {
+    //image = new QPixmap(":/personajes/imagenes/Fondo_Original1.png");
     image = new QPixmap(":/personajes/imagenes/fondo.png");
 }
 
@@ -74,6 +75,11 @@ void Escena_Juego::addObjetoMovil(QString ruta, int x, int y,int xf,int yf, int 
     /// INICIALIZACION DE OBJETO EN ESCENA
     this->addItem(muni);                //Se añade el objeto a la escena
     muni->startMove(time_move);                //Asigna valor de timeout para el movimiento
+}
+
+void Escena_Juego::explodeObject(int _x, int _y, int _w, int _h)
+{
+    muni = new Objeto_Movil(":/personajes/imagenes/explode.png",_x,_y,_w,_h);
 }
 
 ///         FUNCION MOVIMIENTO DE PRUEBA         ///
@@ -152,6 +158,7 @@ bool Escena_Juego::deleteFromScene()
                                 && ((*itObjMov2)->collidesWithItem((*itObjMov)))
                                 /*|| (*itObjMov)->closeness((*itObjMov2),10)*/){
                             collides = true; setScorePlus();
+                            //this->explodeObject((*itObjMov)->getX(),(*itObjMov)->getY(),100,100);
                             (*itObjMov)->deleteObject();
                             objetosMoviles.erase(itObjMov);
                             (*itObjMov2)->deleteObject();

@@ -155,6 +155,7 @@ void MainWindow::instanceItems()
     serial_timer = new QTimer;
     enemy_timer = new QTimer;
     seconds = new QTimer;
+    timer = new QTimer();
 }
 
 void MainWindow::hideItems()
@@ -318,6 +319,7 @@ void MainWindow::connectItems()
     connect(enemy_timer,&QTimer::timeout,this,&MainWindow::addEnemy);
     connect(seconds,&QTimer::timeout,this,&MainWindow::secondsPlusPlus);    
     connect(serial_timer,&QTimer::timeout,this,&MainWindow::serialRead);
+    //connect(timer, &QTimer::timeout, this, &MainWindow::cambiofondo);
 }
 
 ///         FUNCION QUE DISPONE LOS OBJETOS DEL JUEGO         ///
@@ -333,11 +335,12 @@ void MainWindow::loadGameWigets()
 void MainWindow::startGame(QString title,QString text)
 {
         ///INICIALIZAR PARAMETROS
-    infoBox(title,text,"");
+    infoBox(title,text,"");    
     paused = false;
     serialInit();
     serial_timer->start(fs_time);
     seconds->start(time_seconds);
+    //timer->start(200);
     if(arcade) enemy_timer->start(time_enemys/level);
 }
 
@@ -372,12 +375,39 @@ bool MainWindow::saveListEnemies(vector<Objeto_Movil* > vec)
     for(it = vec.begin();it != vec.end(); it++){
         /// SI ES ENEMIGO
         if(!(*it)->getLado()){
-            success = database->insertarEnemigos(match_name,(*it)->getX(),(*it)->getY(),(*it)->getV0(),
+            success = database->insertarEnemigos(match_name,username,(*it)->getX(),(*it)->getY(),(*it)->getV0(),
                                        (*it)->getAngle(),(*it)->getMove());
             if(!success) success2 = false;
         }
     }
     return success2;
+}
+
+void MainWindow::loadData(vector<QString> data)
+{
+
+    arcade = data.at(0).toInt(); qDebug()<<"Arcade "<<arcade;
+    level = data.at(1).toInt();  qDebug()<<"Nivel "<<level;
+    player = data.at(2).toInt();  qDebug()<<"Turno "<<player;
+    cont = data.at(3).toInt();  qDebug()<<"BLood "<<cont;
+    game_time = data.at(4).toInt();  qDebug()<<"game_time "<<game_time;
+    score_1 = data.at(5).toInt();  qDebug()<<"score1 "<<score_1;
+    score_2 = data.at(6).toInt();  qDebug()<<"score2 "<<score_2;
+    ammu1 = data.at(7).toInt();  qDebug()<<"ammo1 "<<ammu1;
+    ammu2 = data.at(8).toInt();  qDebug()<<"ammo2 "<<ammu2;
+    ammu3 = data.at(9).toInt();  qDebug()<<"ammo3 "<<ammu3;
+}
+
+void MainWindow::loadEnemys(vector<QString> enemys)
+{
+    int _x,_y,_v0,_angle,_move;
+    for(int i = 0; unsigned(i)<enemys.size(); i+=5){
+        _x = enemys.at(i).toInt(); qDebug()<<"x "<<_x;
+        _y = enemys.at(i+1).toInt(); qDebug()<<"y "<<_y;
+        _v0 = enemys.at(i+2).toInt(); qDebug()<<"v0 "<<_v0;
+        _angle = enemys.at(i+3).toInt(); qDebug()<<"angle "<<_angle;
+        _move = enemys.at(i+4).toInt(); qDebug()<<"move "<<_move;
+    }
 }
 
 ///         AÑADE OBJETOS SIN MOVIMIENTO         ///
@@ -568,10 +598,10 @@ void MainWindow::endOfGame()
 
     }
     else{
+        qDebug()<<"Player "<<player;
+        player = 2;
         score_player1 = scene->getScore()*int(increment*game_time);
         this->restart("PLAYER 2","BEAT HIM.");
-        player = 2;
-        qDebug()<<player;
     }
 }
 
@@ -589,9 +619,6 @@ void MainWindow::setGameValues(int _blood, int _score, int _player, int _a1, int
 
 void MainWindow::setDefaultValues()
 {
-    scene->setBlood(100);
-    scene->setScore(0);
-    player = 1;
     ammu1 = 30/level; display_ammo1->display(ammu1);
     ammu2 = 30/level; display_ammo2->display(ammu2);
     ammu3 = 30/level; display_ammo3->display(ammu3);
@@ -739,6 +766,13 @@ void MainWindow::add()
     ///DECLARACION DE OBJETOS
     QString ruta = ":/personajes/imagenes/GIFT.png"; int x=0; int y=100; int w=80; int h=80;
     scene->addObjetoGrafico(ruta,x,y,w,h);
+}
+
+void MainWindow::cambiofondo()
+{
+    if (cont == 1) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original1.png"));cont=2;}
+        else if (cont == 2) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original22.png"));cont=3;}
+        else if (cont == 3) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original33.png"));cont=1;}
 }
 
 void MainWindow::imagen1()
