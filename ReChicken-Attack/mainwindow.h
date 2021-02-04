@@ -12,6 +12,8 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QMessageBox>
+#include <QTimer>
+#include <QTime>
 #include <stdlib.h>
 #include <time.h>
 #include "escena_juego.h"
@@ -36,7 +38,10 @@ public:
 
         /// CARACTERISTICAS DE PANTALLA
     void setDeskProperty(int w,int h);
-
+    void Cambiofondo();
+    QTimer *timer=new QTimer();
+    //QTime time;
+    int cont=1;
         /// FUNCIONES DE CARGA DE OBJETOS Y PRESENTACION
     void instanceItems();
     void hideItems();

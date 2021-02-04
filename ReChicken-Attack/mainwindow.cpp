@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
         ///VISUALIZACION Y ESCENA
     view->setScene(scene);
     //view->setBackgroundBrush(QBrush(Qt::black, Qt::SolidPattern));
+    connect(timer, &QTimer::timeout, this, &MainWindow::Cambiofondo);
+    timer->start(200);
 
         ///MAXIMIZAR VENTANA
     this->showMaximized();
@@ -683,4 +685,13 @@ void MainWindow::moveObject()
 {
     ///ASIGNACION DE VALORES
     scene->doSome();
+}
+void MainWindow::Cambiofondo()
+{
+    //view->setBackgroundBrush(QImage(":/personajes/imagenes/fondo.png"));
+
+    if (cont == 1) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original1.png"));cont=2;}
+    else if (cont == 2) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original22.png"));cont=3;}
+    else if (cont == 3) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original33.png"));cont=1;}
+    //else if (cont == 4) {view->setBackgroundBrush(QImage(":/personajes/imagenes/Fondo_Original22.png"));cont=1;}
 }

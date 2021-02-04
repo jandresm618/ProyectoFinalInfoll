@@ -53,5 +53,8 @@
         <file>imagenes/SING UP.png</file>
         <file>imagenes/swamp.png</file>
         <file>imagenes/user.png</file>
+        <file>imagenes/Fondo_Original1.png</file>
+        <file>imagenes/Fondo_Original22.png</file>
+        <file>imagenes/Fondo_Original33.png</file>
     </qresource>
 </RCC>
