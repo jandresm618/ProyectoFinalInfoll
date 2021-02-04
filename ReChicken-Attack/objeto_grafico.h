@@ -27,6 +27,7 @@ public:
     int getW() const;
 
     int getH() const;
+    int cont = 0;
 
 private:
     int x,y;

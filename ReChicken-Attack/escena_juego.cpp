@@ -39,18 +39,25 @@ void Escena_Juego::arcadeDesing()
 {
     int x_1 = 100, y_1 = 500;
     int w_1 = 100, h_1 = 100;
-    QString path_1 = ":/personajes/imagenes/mario.png";
-    addObjetoGrafico(path_1,x_1,y_1,w_1,h_1);
+    //QString path_1 = ":/personajes/imagenes/mario.png";
+    //addObjetoGrafico(path_1,x_1,y_1,w_1,h_1);
 }
 
 ///         AÑADIR OBJETOS GRAFICOS         ///
-void Escena_Juego::addObjetoGrafico(QString ruta, int x, int y, int w, int h)
+void Escena_Juego::addObjetoGrafico(QString ruta, int x, int y, int w, int h,bool main)
 {
-    ///DECLARACION DE OBJETO
-    personaje = new Objeto_Grafico(ruta,x,y,w,h);
-    ///ASIGNACION DE VALORES
-    this->addItem(personaje);
-    objetosGraficos.push_back(personaje);
+    if(main){
+        ///DECLARACION DE OBJETO
+        personaje = new Objeto_Grafico(ruta,x,y,w,h);
+        ///ASIGNACION DE VALORES
+        this->addItem(personaje);
+
+    }else{
+        explosiones = new Objeto_Grafico(ruta,x,y,w,h);
+        ///ASIGNACION DE VALORES
+        this->addItem(explosiones);
+        objetosGraficos.push_back(explosiones);
+    }
 }
 
 ///         AÑADIR OBJETOS GRAFICOS MOVILES         ///
@@ -100,6 +107,32 @@ void Escena_Juego::doSome()
     personaje->set_Pos(personaje->getX()+50,personaje->getY());
 }
 
+void Escena_Juego::explode(Objeto_Movil *enem)
+{
+    int x,y;
+    x=enem->getX();
+//    y=enem->getY()-100;
+    y=enem->getY();
+    explosiones = new Objeto_Grafico(":/personajes/imagenes/explode.png",x,y,80,80);
+    this->addItem(explosiones);
+    objetosGraficos.push_back(explosiones);
+}
+
+void Escena_Juego::explodePlusPlus()
+{
+    if(!objetosGraficos.empty()){
+        for(itObjGra=objetosGraficos.begin();itObjGra!=objetosGraficos.end();itObjGra++){
+            if((*itObjGra)->cont > 15){
+                //this->removeItem((*itObjGra));
+                delete (*itObjGra);
+                objetosGraficos.erase(itObjGra);
+                return;
+            }
+            else (*itObjGra)->cont++;
+        }
+    }
+}
+
 int Escena_Juego::getHurt()
 {
     return blood;
@@ -131,6 +164,12 @@ void Escena_Juego::restart()
         }
         objetosMoviles.clear();
     }
+    if(!objetosGraficos.empty()){
+        for(itObjGra = objetosGraficos.begin();itObjGra != objetosGraficos.end();itObjGra++){
+            delete (*itObjGra);
+        }
+        objetosGraficos.clear();
+    }
     score = 0;
     blood = 100;
 }
@@ -147,10 +186,12 @@ bool Escena_Juego::deleteFromScene()
     cont_1++;
     bool collides = false;
     int cont = 0,cont2 = 0;
+    explodePlusPlus();
     if(!objetosMoviles.empty()){
         for(itObjMov = objetosMoviles.begin();itObjMov != objetosMoviles.end();itObjMov++,cont++){
             if((*itObjMov)->getOutOfScene()){
                 collides = true;
+                explode((*itObjMov));
                 if(!(*itObjMov)->getLado()){
                     ///SE REDUCE LA VIDA DEL JUGADOR
                     this->setHurt();
@@ -169,6 +210,7 @@ bool Escena_Juego::deleteFromScene()
                                 && ((*itObjMov2)->collidesWithItem((*itObjMov)))
                                 /*|| (*itObjMov)->closeness((*itObjMov2),10)*/){
                             collides = true; setScorePlus();
+                            explode((*itObjMov));
                             //this->explodeObject((*itObjMov)->getX(),(*itObjMov)->getY(),100,100);
                             (*itObjMov)->deleteObject();
                             objetosMoviles.erase(itObjMov);

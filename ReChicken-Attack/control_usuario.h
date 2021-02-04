@@ -6,6 +6,7 @@
 #include <QTableWidget>
 #include <QLineEdit>
 #include <QSpinBox>
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "database.h"
 
@@ -52,6 +53,7 @@ public:
     void loadDataGame();
 
     void printVector(vector<QString> vec);
+    void infoBox(QString title, QString text, QString infoText);
 
 
 
@@ -60,6 +62,7 @@ private:
     MainWindow *gameWindow;
     QDesktopWidget *deskWidget;
     DataBase *database;
+    QMessageBox *msgBox;
 
     QPushButton *boton1;
     QPushButton *boton2;

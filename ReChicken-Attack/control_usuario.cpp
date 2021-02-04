@@ -52,6 +52,9 @@ void Control_Usuario::crearObjetos()
     desk_width = deskWidget->width();   desk_height = deskWidget->height();
     gameWindow->setDeskProperty(desk_width,desk_height);
     gameWindow->setDatabase(database);
+    msgBox = new QMessageBox(this);
+    msgBox->setStyleSheet("border-image:url(:/personajes/imagenes/index.png);");
+    msgBox->setGeometry((desk_width/2)-100,(2*desk_height/3)-100,300,400);
     boton1 = new QPushButton(this);
     boton2 = new QPushButton(this);
     boton3 = new QPushButton(this);
@@ -210,7 +213,7 @@ void Control_Usuario::setMenuWindow()
     ///CONEXION DE SIGNAL & SLOT
     connect(boton1,&QPushButton::clicked,this,&Control_Usuario::setArcade);
     connect(boton2,&QPushButton::clicked,this,&Control_Usuario::setMultiplayer);
-    connect(boton3,&QPushButton::clicked,this,&Control_Usuario::loadDataGame);
+    connect(boton3,&QPushButton::clicked,this,&Control_Usuario::loadGame);
     connect(boton4,&QPushButton::clicked,this,&Control_Usuario::setMultiplayer);
     connect(boton5,&QPushButton::clicked,this,&Control_Usuario::setMultiplayer);
 }
@@ -338,17 +341,16 @@ void Control_Usuario::validateUser()
             if(!database->getUser()){
                 /// EL USUARIO NO EXISTE
                 if(password1 == password2){
-                    qDebug()<<"CONTRASEÑAS COINCIDEN";
                     database->insertarUsuario(username,password1);
                     user_name = username;
                     proced = true;
-                    qDebug()<<"USUARIO INGRESADO";
+
                 }
-                else qDebug()<<"CONTRASEÑAS NO COINCIDEN";
+                else infoBox("WARNING","PASSWORD DON`T MATCH.","");
             }
             else{
                 /// EL USUARIO YA EXISTE
-                qDebug()<<"NOMBRE DE USUARIO YA EXISTE.";
+                infoBox("WARNING","USER ALREADY EXIST.","");
             }
         }
         else{
@@ -360,7 +362,7 @@ void Control_Usuario::validateUser()
             qDebug()<<"USUARIO CHEQUEADO";
         }
     }
-    else qDebug()<<"NOMBRE DE USUARIO INCORRECTO";
+    else infoBox("WARNING","INCORECT USERNAME.","");
     if(proced) setMenuWindow();
 }
 
@@ -375,7 +377,6 @@ void Control_Usuario::startGame()
     if(arcade) level = spin_box1->value();
     QString match_name = line_Edit1->text();
     if(database->validarMatchName(match_name)){
-        qDebug()<<"NOMBRE VALIDO";
         showMainWindow();
         gameWindow->setArcade(arcade);
         gameWindow->loadGameWigets();
@@ -386,7 +387,9 @@ void Control_Usuario::startGame()
         gameWindow->setDefaultValues();
     }
     else{
-        qDebug()<<"NOMBRE NO VALIDO";
+        infoBox("WARNING","THIS NAME ALREADY EXISTS.","");
+        //infoBox("WARNING","","");
+        //qDebug()<<"NOMBRE NO VALIDO";
     }
 
 }
@@ -395,15 +398,16 @@ void Control_Usuario::loadDataGame()
 {
     vector<QString> data,enemys;
     QString match_n = line_Edit1->text();
-    data = database->mostrarDatos("terceraV",user_name);
-    enemys = database->mostrarEnemigos("terceraV",user_name);
+    data = database->mostrarDatos(match_n,user_name);
+    enemys = database->mostrarEnemigos(match_n,user_name);
     if(!data.empty() && !enemys.empty()){
         showMainWindow();
         gameWindow->loadGame(data,enemys);
     }
     else{
-        /// PROBLEMAS AL CARGAR PARTIDA
-        qDebug()<<"NO SE HA PODIDO CARGAR LA PARTIDA";
+        /// PROBLEMAS AL CARGAR PARTIDA 
+        infoBox("WARNING.","CANNOT LOAD GAME.","");
+        //qDebug()<<"NO SE HA PODIDO CARGAR LA PARTIDA";
     }
 }
 
@@ -415,4 +419,15 @@ void Control_Usuario::printVector(vector<QString> vec)
             qDebug()<<"-> "<<(*it);
         }
     }
+}
+
+void Control_Usuario::infoBox(QString title, QString text, QString infoText)
+{
+    msgBox->setWindowTitle(title);
+    msgBox->setText(text);
+    msgBox->setInformativeText(infoText);
+    msgBox->setGeometry((desk_width/2)-100,(2*desk_height/3)-100,300,700);
+    msgBox->exec();
+    //msgBox->removeButton(msgBox->buttons().at(0));
+    msgBox->hide();
 }

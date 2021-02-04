@@ -46,6 +46,7 @@ public:
     void loadGameWigets();
     void startGame(QString title,QString text);
     void loadGame(vector<QString> data, vector<QString> enemys);
+    void displayData();
 
         /// FUNCIONES CONTROL DEL JUEGO
     void endOfGame();
@@ -70,7 +71,7 @@ public:
         /// SLOTS
     void comeBack();
     void moveObject();
-    void addObjetoGrafico(QString ruta,int x,int y, int w, int h);
+    void addObjetoGrafico(QString ruta, int x, int y, int w, int h, bool main);
     void addObjetoMovil(QString ruta,int xo,int yo,int xf,int yf,int w,int h,int _move);
     void addObjetoMovil(QString ruta,int xo,int yo,int v0,int angle,int _move);
     void addObjetoMovil1();
@@ -168,7 +169,11 @@ private:
 
         /// VARIABLES DE CONTROL
     QString match_name,username;
-    QString enemy_path = ":/personajes/imagenes/pollo2.png";
+    QString main_caracter_path = ":/personajes/imagenes/senor11.png";
+    QString enemy_path = ":/personajes/imagenes/pollo.png";
+    QString bala1_path = ":/personajes/imagenes/Bala1.png";
+    QString bala2_path = ":/personajes/imagenes/Bomba.png";
+    QString bala3_path = ":/personajes/imagenes/Bala3.png";
     bool arcade = true;
     bool paused = false;
     int player = 1;
@@ -178,7 +183,8 @@ private:
     int score_1 = 0,score_2 = 0;
 
         ///POSICION DE PERSONAJE PRINCIPAL
-    int x_sir = 0, y_sir = 500;
+    int x_sir = desk_widht/8, y_sir = desk_height-310;
+    int w_sir = 200, h_sir = 300;
         /// NUMERO DE MUNICIONES
     int ammu1 = 10, ammu2 = 10, ammu3 =  10;
         /// INDICADOR DE TIPO MOVIMIENTO

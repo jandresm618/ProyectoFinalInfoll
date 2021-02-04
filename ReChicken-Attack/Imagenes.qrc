@@ -44,5 +44,10 @@
         <file>imagenes/Fondo_Original22.png</file>
         <file>imagenes/Fondo_Original33.png</file>
         <file>imagenes/index.png</file>
+        <file>imagenes/Bala1.png</file>
+        <file>imagenes/Bala3.png</file>
+        <file>imagenes/Bomba.png</file>
+        <file>imagenes/pollo.png</file>
+        <file>imagenes/senor11.png</file>
     </qresource>
 </RCC>

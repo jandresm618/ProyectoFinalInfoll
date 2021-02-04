@@ -27,13 +27,15 @@ public:
     void arcadeDesing();
 
         /// FUNCIONES AÑADIR OBJETOS GRAFICOS
-    void addObjetoGrafico(QString ruta,int x,int y,int w,int h);
+    void addObjetoGrafico(QString ruta, int x, int y, int w, int h, bool main);
     void addObjetoMovil(QString ruta,int x,int y,int xf,int yf,int w,int h,int move);
     void addObjetoMovil(QString ruta,int x,int y,int v0,int angle,int move);
     void explodeObject(int _x,int _y,int _w,int _h);
 
         /// FUNCIONES DE PRUEBA
     void doSome();
+    void explode(Objeto_Movil *enem);
+    void explodePlusPlus();
 
         /// MANEJO DE ATRIBUTO SANGRE
     void setHurt();
@@ -60,6 +62,7 @@ public:
 private:
     /// APUNTADOR A OBJETOS GRAFICOS
     Objeto_Grafico *personaje;
+    Objeto_Grafico *explosiones;
     Objeto_Movil *muni;
 
         /// CONTENEDORES DE OBJETOS

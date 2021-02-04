@@ -190,7 +190,7 @@ void MainWindow::addItems2Scene(int opc)
     p1.setColor(QPalette::Highlight, Qt::red);
     switch (opc) {
         case 1:
-            addObjetoGrafico(":/personajes/imagenes/senor1.png",desk_widht/8,2*desk_height/4,200,300);
+            addObjetoGrafico(":/personajes/imagenes/senor1.png",desk_widht/8,2*desk_height/4,200,300,true);
             setPosSir(desk_widht/8,2*desk_height/4);
             label1->setGeometry((desk_widht/2)-150,desk_height/10,100,50);
             label1->setStyleSheet("border-image:url(:/personajes/imagenes/SCORE.png);");
@@ -236,7 +236,7 @@ void MainWindow::addItems2Scene(int opc)
             msgBox->setPalette(p);
             msgBox->setGeometry((desk_widht/2)-100,(2*desk_height/3)-100,300,400);
                 ///PUESTA EN ESCENA DEL PERSONAJE
-            addObjetoGrafico(":/personajes/imagenes/senor1.png",desk_widht/8,2*desk_height/4,200,300);
+            addObjetoGrafico(main_caracter_path,desk_widht/8,2*desk_height/4,w_sir,h_sir,true);
             setPosSir(desk_widht/8,2*desk_height/4);
                 ///LABELS
             label1->setGeometry(60,80,100,50);
@@ -256,13 +256,13 @@ void MainWindow::addItems2Scene(int opc)
                 ///BOTONES
             //boton->setGeometry(100,50,100,80);
             boton2->setGeometry(50,150,80,60);
-            boton2->setStyleSheet("border-image:url(:/personajes/imagenes/Bala2.png);");
+            boton2->setStyleSheet("border-image:url(:/personajes/imagenes/Bala1.png);");
             boton2->setPalette(p);
             boton3->setGeometry(50,210,80,60);
-            boton3->setStyleSheet("border-image:url(:/personajes/imagenes/Bala2.png);");
+            boton3->setStyleSheet("border-image:url(:/personajes/imagenes/Bomba.png);");
             boton3->setPalette(p);
             boton4->setGeometry(50,270,80,60);
-            boton4->setStyleSheet("border-image:url(:/personajes/imagenes/Bala2.png);");
+            boton4->setStyleSheet("border-image:url(:/personajes/imagenes/Bala3.png);");
             boton4->setPalette(p);
             //boton5->setGeometry(600,300,100,80);
             display_ammo1->setGeometry(130,150,80,60);
@@ -345,11 +345,23 @@ void MainWindow::startGame(QString title,QString text)
 void MainWindow::loadGame(vector<QString> data, vector<QString> enemys)
 {
     loadData(data);
+    displayData();
     loadEnemys(enemys);
     loadGameWigets();
     connectItems();
     startGame("GAME LOADED","DO IT BETTER");
     scene->start();
+}
+
+void MainWindow::displayData()
+{
+    display_ammo1->display(ammu1);
+    display_ammo1->display(ammu2);
+    display_ammo1->display(ammu3);
+    life_bar->setValue(cont);
+    display_time->display(game_time);
+    if(player == 1) display_score->display(score_1*int(increment*game_time));
+    else display_score->display(score_2*int(increment*game_time));
 }
 
 
@@ -420,10 +432,10 @@ void MainWindow::loadEnemys(vector<QString> enemys)
 }
 
 ///         AÑADE OBJETOS SIN MOVIMIENTO         ///
-void MainWindow::addObjetoGrafico(QString ruta, int x, int y, int w, int h)
+void MainWindow::addObjetoGrafico(QString ruta, int x, int y, int w, int h,bool main)
 {
     ///DECLARACION DE OBJETOS
-    scene->addObjetoGrafico(ruta,x,y,w,h);
+    scene->addObjetoGrafico(ruta,x,y,w,h,main);
 }
 
 ///         AÑADE OBJETOS CON MOVIMIENTO         ///
@@ -453,7 +465,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         //qDebug()<<"\nAÑADIENDO OBJETO\n";
         if(!arcade){
             if(scene->getHurt() > 0){
-                addObjetoMovil(QString(":/personajes/imagenes/pollo2.png"),
+                addObjetoMovil(enemy_path,
                                desk_widht,300,x_sir,y_sir,100,100,move2);
             }
         }
@@ -501,6 +513,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
                 success = saveListEnemies(scene->getObjetosMoviles());
                 if(success){
                     success = saveMatchData();
+                    infoBox("GOTCHA","SAVED SUCCESFULY.","");this->start();
                     if(!success){
                         infoBox("WARNING","CAN`T SAVE THE GAME","");this->start();
                         }
@@ -527,19 +540,19 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     if(enable2Shot){
         enable2Shot = false;
         if (move1 == 1 && ammu1 > 0){
-            addObjetoMovil(QString(":/personajes/imagenes/Bala2.png"),
+            addObjetoMovil(bala1_path,
                            x_sir,y_sir,event->x(),event->y(),50,50,move1);
             ammu1--;
             display_ammo1->display(ammu1);
         }
         else if (move1 == 2 && ammu2 > 0){
-            addObjetoMovil(QString(":/personajes/imagenes/Bala2.png"),
+            addObjetoMovil(bala2_path,
                            x_sir,y_sir,event->x(),event->y(),50,50,move1);
             ammu2--;
             display_ammo2->display(ammu2);
         }
         else if (move1 == 3 && ammu3 > 0){
-            addObjetoMovil(QString(":/personajes/imagenes/Bala2.png"),
+            addObjetoMovil(bala3_path,
                            x_sir,y_sir,event->x(),event->y(),50,50,move1);
             ammu3--;
             display_ammo3->display(ammu3);
@@ -568,6 +581,7 @@ bool MainWindow::canShot(int limit)
 void MainWindow::endOfGame()
 {
     QString title, infoText,text;
+    bool opt = false;
     /// PAUSA A TODO EN ESCENA
     pause();
 
@@ -577,7 +591,8 @@ void MainWindow::endOfGame()
         title = "GAME ENDED";
         text = "THE FINAL SCORE IS:";
         infoText = QString::number(score_player1);
-        if(!questionBox(title,text,infoText,"MENU","RESTART")){
+        opt = questionBox(title,text,infoText,"MENU","RESTART");
+        if(!opt){
             // GO TO MENU
             scene->restart();
             comeBack();
@@ -601,7 +616,8 @@ void MainWindow::endOfGame()
         else {
             infoText = "PLAYER 2 -> SCORE: "+QString::number(score_player2);
         }
-        if (!questionBox(title,text,infoText,"MENU","RESTART")) {
+        opt = questionBox(title,text,infoText,"MENU","RESTART");
+        if (!opt) {
             // GO TO MENU
             scene->restart();
             comeBack();
@@ -612,7 +628,7 @@ void MainWindow::endOfGame()
 
     }
     else{
-        qDebug()<<"Player "<<player;
+        //qDebug()<<"Player "<<player;
         player = 2;
         score_player1 = scene->getScore()*int(increment*game_time);
         this->restart("PLAYER 2","BEAT HIM.");
@@ -643,7 +659,7 @@ void MainWindow::setDefaultValues()
 void MainWindow::addEnemy()
 {
     move2=1+rand()%(4-1);
-    addObjetoMovil(QString(":/personajes/imagenes/pollo2.png"),
+    addObjetoMovil(enemy_path,
                    desk_widht,300,x_sir,y_sir,100,100,move2);
 }
 
@@ -779,7 +795,7 @@ void MainWindow::add()
 {
     ///DECLARACION DE OBJETOS
     QString ruta = ":/personajes/imagenes/GIFT.png"; int x=0; int y=100; int w=80; int h=80;
-    scene->addObjetoGrafico(ruta,x,y,w,h);
+    scene->addObjetoGrafico(ruta,x,y,w,h,false);
 }
 
 void MainWindow::cambiofondo()
