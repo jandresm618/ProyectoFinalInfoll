@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
+//#include <QtSerialPort/QSerialPort>
+//#include <QtSerialPort/QSerialPortInfo>
 #include <QKeyEvent>
 #include <QPushButton>
 #include <QGraphicsView>
@@ -118,6 +118,8 @@ public:
     void setMatch_name(const QString &value);
 
     void setUsername(const QString &value);
+    void setBackground1();
+    void setBackground2();
 
 private:
     Ui::MainWindow *ui;
@@ -125,7 +127,7 @@ private:
     DataBase *database;
     QMessageBox *msgBox;
         /// OBJETO PUERTO SERIAL
-    QSerialPort serial;
+    //QSerialPort serial;
         /// BOTONES
     QPushButton *boton;
     QPushButton *boton2;
@@ -171,8 +173,8 @@ private:
     QString match_name,username;
     QString main_caracter_path = ":/personajes/imagenes/senor11.png";
     QString enemy_path = ":/personajes/imagenes/pollo.png";
-    QString bala1_path = ":/personajes/imagenes/Bala1.png";
-    QString bala2_path = ":/personajes/imagenes/Bomba.png";
+    QString bala1_path = ":/personajes/imagenes/Bomba.png";
+    QString bala2_path = ":/personajes/imagenes/Bala1.png";
     QString bala3_path = ":/personajes/imagenes/Bala3.png";
     bool arcade = true;
     bool paused = false;
@@ -181,6 +183,7 @@ private:
     float increment = 1.3;
     int score_player1 = 0,score_player2 = 0;
     int score_1 = 0,score_2 = 0;
+    int high_score = 0;
 
         ///POSICION DE PERSONAJE PRINCIPAL
     int x_sir = desk_widht/8, y_sir = desk_height-310;

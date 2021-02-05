@@ -13,15 +13,30 @@ Movimiento::Movimiento(float _x,float _y,int xf,int yf): x(_x),y(_y),px(_x),py(_
     else lado = false;              //Movimiento de derecha a izquierda
 }
 
+void Movimiento::setMUA()
+{
+    vx=(pfx-px-float(0.5)*ax*float(DT*DT));
+    vy=(pfy-py-float(0.5)*ay*float(DT*DT));
+    qDebug()<<"vx: "<<vx;
+    qDebug()<<"vy: "<<vy;
+
+}
+
 bool Movimiento::actualizarMUA()
 {
     bool outScene = false;
     float v = 10;
     float A = 30;
     float freq = 1/2;
-    if(!lado) v = -10;
-    x = x + v*t;
-    y = y + A*sin(2*3.1416*freq*t);
+    if(!lado) v = -30;
+    if(!lado){
+        x = x + v*t;
+        y = y + A*sin(2*3.1416*freq*t);
+    }
+    else{
+        x = x + vx*t;
+        y = y + vy*t;
+    }
     //qDebug()<<x<<" , "<<t;
     t = t +0.01;
     ///SI SE CUMPLE LA CONDICION
@@ -46,7 +61,7 @@ bool Movimiento::actualizarSeno()
     if(lado) x = x + v;
     else x = x - v;
 
-    y = y + A*sin(/*2*3.1416*freq**/t);
+    y = y + (-1*A*cos(/*2*3.1416*freq**/t));
     //qDebug()<<x<<" , "<<sin(2*3.1416*freq*x);
     t = t +0.4;
     ///SI SE CUMPLE LA CONDICION
@@ -61,8 +76,8 @@ bool Movimiento::actualizar(float dt)
 {
     ///DECLARACION DE VARIABLES AUXILIARES LOCALES
     bool outScene = false;
-    ax = 0;                         //Aceleracion en Componente x
-    ay = G;                         //Aceleracion en Componente y
+    //ax = 0;                         //Aceleracion en Componente x
+    //ay = G;                         //Aceleracion en Componente y
 
     ///ASIGNACION DE VALORES
     //vx = vx;                      //Velocidad en Componente x
@@ -247,6 +262,23 @@ bool Movimiento::getLado() const
     return lado;
 }
 
+float Movimiento::getVx() const
+{
+    return vx;
+}
+
+float Movimiento::getVy() const
+{
+    return vy;
+}
+
+void Movimiento::setReverse()
+{
+    if(lado) vy = -1*vy*e1;
+    else vy = -1*vy*e2;
+    ay = -1*G;
+}
+
 int Movimiento::getPosBestMove(int param, bool minMax)
 {
     ///DECLARACION DE VARIABLES AUXILIARES LOCALES
@@ -294,10 +326,18 @@ float Movimiento::getY() const
 
 void Movimiento::setParamsMove(float _v0, float angle)
 {
-    ///ASIGNACION DE VALORES
+    ///ASIGNACION DE VALORES    
     x = px;     y = py;
     v0 = _v0;   angulo = angle;
     vx = v0*cos(angulo*pi/180);    //Velocidad inicial de x
     vy = abs(v0)*sin(angulo*pi/180) - ay*DT; //Velocidad inicial de y
+}
+
+void Movimiento::set_vel(int _vx, int _vy, int _px, int _py)
+{
+    vx = _vx;
+    vy = _vy;
+    x = _px;
+    y = _py;
 }
 

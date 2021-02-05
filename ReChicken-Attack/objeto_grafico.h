@@ -24,14 +24,22 @@ public:
 
     QString getRuta() const;
 
+
     int getW() const;
 
     int getH() const;
     int cont = 0;
 
+    void setEscala(float value);
+    void escalaMinusMinus();
+
+    void setRest(float value);
+
 private:
     int x,y;
     int w,h;
+    float escala = 1;
+    float rest = 1;
     QString ruta;
     QPixmap *image;
 };

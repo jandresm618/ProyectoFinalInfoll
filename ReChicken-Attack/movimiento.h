@@ -22,6 +22,7 @@ public:
     Movimiento(float _x,float _y,int xf,int yf);
 
     /// MOVIMIENTO RECTILINEO ACELERADO
+    void setMUA();
     bool actualizarMUA();
 
     /// MOVIMIENTO SENOIDAL
@@ -41,6 +42,7 @@ public:
     /// METODOS SET
     void setParametros(int cont);
     void setParamsMove(float v0,float angle);
+    void set_vel(int _vx, int _vy, int _px, int _py);
 
 
     /// METODOS GET
@@ -58,6 +60,12 @@ public:
 
     bool getLado() const;
 
+    float getVx() const;
+
+    float getVy() const;
+
+    void setReverse();
+
 private:
     bool lado; //Indicador de bando
     //false = Defensivo
@@ -68,12 +76,13 @@ private:
     float px= 0,py= 0;
     int pfx, pfy;
     float vx= 0,vy= 0;
-    float ax= 0,ay= 0;
+    float ax= 0,ay = G;
     float v0= 0;
     float v0x= 0,v0y= 0;
     float angulo= 0;
     float time= 0;
     float aux_v= 0,aux_sin= 0;
+    float e1 = 1.5,e2 = 0.5;
 
     float t = 0;
 

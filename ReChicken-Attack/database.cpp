@@ -103,7 +103,8 @@ void DataBase::crearTabladeRecords()
     consulta.append("CREATE TABLE IF NOT EXISTS record("
                     "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     "nombre VARCHAR(100),"
-                    "best_score INTEGER"
+                    "best_score INTEGER,"
+                    "player INTEGER"
                     ");");
     QSqlQuery crear;
     crear.prepare(consulta);
@@ -268,25 +269,27 @@ void DataBase::insertarRecord()
         qDebug()<<"ERROR!"<<insertar.lastError();
     }
 }
-void DataBase::insertarRecord(QString name,QString high_score)
+void DataBase::insertarRecord(QString name,QString high_score, QString player)
 {
     QString consulta;
     consulta.append("INSERT INTO record("
                     "nombre ,"
-                    "best_score "
+                    "best_score ,"
+                    "player "
                     ")"
                     "VALUES("
                     "'"+name+"',"
-                    "'"+high_score+"'"
+                    "'"+high_score+"',"
+                    "'"+player+"'"
                     ");");
     QSqlQuery insertar;
     qDebug()<<consulta;
     insertar.prepare(consulta);
     if(insertar.exec()){
-        qDebug()<<"Se ha ingresado el usuario correctamente.";
+        qDebug()<<"Se ha ingresado el record correctamente.";
     }
     else {
-        qDebug()<<"El usuario no se ha ingresado";
+        qDebug()<<"El record no se ha ingresado";
         qDebug()<<"ERROR!"<<insertar.lastError();
     }
 }
@@ -405,10 +408,10 @@ vector<QString> DataBase::mostrarEnemigos(QString match_name, QString username)
     return enemys;
 }
 
-void DataBase::mostrarRecord()
+vector<QString> DataBase::mostrarRecord()
 {
-    int i=0;
-    QString r;
+    vector<QString> data;
+    QString r1,r2,r3;
     QString consulta;
     consulta.append("SELECT * FROM record"
                     );
@@ -422,11 +425,44 @@ void DataBase::mostrarRecord()
         qDebug()<<"ERROR!"<<mostrar.lastError();
     }
     while (mostrar.next()) {
-        qDebug()<<"nombre de partida"<<mostrar.value(1).toByteArray().constData();
-        r=mostrar.value(2).toByteArray().constData();
-        qDebug()<<"record "<< r<< "  "<<QString::number(r.toInt());
+        r1 = mostrar.value(1).toByteArray().constData();
+        data.push_back(r1);
+        r2 = mostrar.value(2).toByteArray().constData();
+        data.push_back(r2);
+        r2 = mostrar.value(3).toByteArray().constData();
+        data.push_back(r3);
+        qDebug()<<r1<<" - "<<r2<<" - "<<r3;
+
 
     }
+    return data;
+}
+
+vector<QString> DataBase::mostrarPartidas(QString username)
+{
+    QString r1,r2,r = "";
+    vector<QString> data;
+    QString consulta;
+    consulta.append("SELECT * FROM data"
+                    );
+    QSqlQuery mostrar;
+    mostrar.prepare(consulta);
+    if(mostrar.exec()){
+        qDebug()<<"Se ha mostrado el usuario correctamente.";
+    }
+    else {
+        qDebug()<<"El usuario no se ha mostrado";
+        qDebug()<<"ERROR!"<<mostrar.lastError();
+    }
+    while (mostrar.next()) {
+        r2 = mostrar.value(2).toByteArray().constData(); //Nombre de usuario
+        if((username == r2)){
+            r1 = mostrar.value(1).toByteArray().constData(); //Nombre Partida
+            if(r1 != r){data.push_back(r1);r = r1;}
+        }
+
+    }
+    return data;
 }
 
 bool DataBase::validarUsuario(QString _name, QString _psswd)

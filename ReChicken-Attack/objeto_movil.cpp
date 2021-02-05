@@ -24,6 +24,7 @@ Objeto_Movil::Objeto_Movil(QString _ruta, int _x, int _y,int _xf,int _yf, int _w
         break;
     case 3:
             ///Movimiento Rectilineo Acelerado
+        this->setMUA();
         connect(time_move,&QTimer::timeout,this,&Objeto_Movil::updatePos3);
         break;
     default:
@@ -104,9 +105,35 @@ void Objeto_Movil::setVel(float _v0, float _angle)
     movimiento->setParamsMove(v0,angle);
 }
 
+void Objeto_Movil::set_vel(int vx, int vy, int px, int py)
+{
+    this->movimiento->set_vel(vx,vy,px,py);
+    this->set_Pos(px,py);
+}
+
 void Objeto_Movil::setMovSenoidal()
 {
     movimiento->setMovSeno();
+}
+
+void Objeto_Movil::setMUA()
+{
+    this->movimiento->setMUA();
+}
+
+float Objeto_Movil::get_velX()
+{
+    return this->movimiento->getVx();
+}
+
+float Objeto_Movil::get_velY()
+{
+    return this->movimiento->getVy();
+}
+
+void Objeto_Movil::setInverseMove()
+{
+    this->movimiento->setReverse();
 }
 
 void Objeto_Movil::startMove(int msec)
@@ -204,5 +231,10 @@ int Objeto_Movil::getAngle() const
 int Objeto_Movil::getMove() const
 {
     return move;
+}
+
+void Objeto_Movil::setRestitucion(float value)
+{
+    this->setRest(value);
 }
 

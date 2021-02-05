@@ -56,6 +56,8 @@ MainWindow::~MainWindow()
 }
 
 /// INICIALIZACION DEL PUERTO SERIE     ///
+/// \brief MainWindow::serialInit
+/*
 void MainWindow::serialInit()
 {
     serial.setPortName("/dev/ttyUSB0"); //Poner el nombre del puerto
@@ -85,7 +87,7 @@ void MainWindow::serialInit()
         qDebug()<<"Serial ttyACM0 not opened. Error: "<<serial.errorString();
     }
 
-}
+}*/
 
 ///      LECTURA DEL PUERTO SERIE       ///
 void MainWindow::serialRead(){
@@ -96,13 +98,13 @@ void MainWindow::serialRead(){
     if(blood == 0) emit end();
     display_score->display(scene->getScore()*int(increment*game_time));
 
-
+    /*
     if(serial_available){
         serial.read(&serial_char,1); //Leer toda la línea que envía arduino
         if(serial_char!=0){
             cout<<serial_char<<"************+"<<endl;
         }
-    }
+    }*/
 }
 
 
@@ -236,8 +238,8 @@ void MainWindow::addItems2Scene(int opc)
             msgBox->setPalette(p);
             msgBox->setGeometry((desk_widht/2)-100,(2*desk_height/3)-100,300,400);
                 ///PUESTA EN ESCENA DEL PERSONAJE
-            addObjetoGrafico(main_caracter_path,desk_widht/8,2*desk_height/4,w_sir,h_sir,true);
-            setPosSir(desk_widht/8,2*desk_height/4);
+            addObjetoGrafico(main_caracter_path,(2*desk_widht/8),(3*desk_height/4)-50,w_sir,h_sir,true);
+            setPosSir((2*desk_widht/8),(3*desk_height/4)-50);
                 ///LABELS
             label1->setGeometry(60,80,100,50);
             label1->setStyleSheet("border-image:url(:/personajes/imagenes/LIFE.png);");
@@ -256,10 +258,10 @@ void MainWindow::addItems2Scene(int opc)
                 ///BOTONES
             //boton->setGeometry(100,50,100,80);
             boton2->setGeometry(50,150,80,60);
-            boton2->setStyleSheet("border-image:url(:/personajes/imagenes/Bala1.png);");
+            boton2->setStyleSheet("border-image:url(:/personajes/imagenes/Bomba.png);");
             boton2->setPalette(p);
             boton3->setGeometry(50,210,80,60);
-            boton3->setStyleSheet("border-image:url(:/personajes/imagenes/Bomba.png);");
+            boton3->setStyleSheet("border-image:url(:/personajes/imagenes/Bala1.png);");
             boton3->setPalette(p);
             boton4->setGeometry(50,270,80,60);
             boton4->setStyleSheet("border-image:url(:/personajes/imagenes/Bala3.png);");
@@ -335,7 +337,7 @@ void MainWindow::startGame(QString title,QString text)
         ///INICIALIZAR PARAMETROS
     infoBox(title,text,"");    
     paused = false;
-    serialInit();
+    //serialInit();
     serial_timer->start(fs_time);
     seconds->start(time_seconds);
     //timer->start(200);
@@ -517,7 +519,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
                     if(!success){
                         infoBox("WARNING","CAN`T SAVE THE GAME","");this->start();
                         }
-                    else{
+                    else{                        
                         scene->restart();
                         comeBack();
                     }
@@ -541,19 +543,19 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         enable2Shot = false;
         if (move1 == 1 && ammu1 > 0){
             addObjetoMovil(bala1_path,
-                           x_sir,y_sir,event->x(),event->y(),50,50,move1);
+                           x_sir+60,y_sir-60,event->x(),event->y(),50,50,move1);
             ammu1--;
             display_ammo1->display(ammu1);
         }
         else if (move1 == 2 && ammu2 > 0){
             addObjetoMovil(bala2_path,
-                           x_sir,y_sir,event->x(),event->y(),50,50,move1);
+                           x_sir+60,y_sir-60,event->x(),event->y(),50,50,move1);
             ammu2--;
             display_ammo2->display(ammu2);
         }
         else if (move1 == 3 && ammu3 > 0){
             addObjetoMovil(bala3_path,
-                           x_sir,y_sir,event->x(),event->y(),50,50,move1);
+                           x_sir+60,y_sir-60,event->x(),event->y(),50,50,move1);
             ammu3--;
             display_ammo3->display(ammu3);
         }
@@ -594,6 +596,7 @@ void MainWindow::endOfGame()
         opt = questionBox(title,text,infoText,"MENU","RESTART");
         if(!opt){
             // GO TO MENU
+            database->insertarRecord(username,QString::number(score_player1),QString::number(player));
             scene->restart();
             comeBack();
         }
@@ -611,14 +614,17 @@ void MainWindow::endOfGame()
         text = "THE WINNER IS:";
 
         if(score_player1 > score_player2){
+            high_score = score_player1;
             infoText = "PLAYER 1 -> SCORE: "+QString::number(score_player1);
         }
         else {
+            high_score = score_player2;
             infoText = "PLAYER 2 -> SCORE: "+QString::number(score_player2);
         }
         opt = questionBox(title,text,infoText,"MENU","RESTART");
         if (!opt) {
             // GO TO MENU
+            database->insertarRecord(username,QString::number(high_score),QString::number(player));
             scene->restart();
             comeBack();
         } else {
@@ -859,6 +865,16 @@ void MainWindow::setMatch_name(const QString &value)
 void MainWindow::setUsername(const QString &value)
 {
     username = value;
+}
+
+void MainWindow::setBackground1()
+{
+    scene->setBackGround(true);
+}
+
+void MainWindow::setBackground2()
+{
+    scene->setBackGround(false);
 }
 
 

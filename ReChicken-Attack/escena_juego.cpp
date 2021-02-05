@@ -3,8 +3,9 @@
 ///         CONSTRUCTOR         ///
 Escena_Juego::Escena_Juego()
 {
-    //image = new QPixmap(":/personajes/imagenes/Fondo_Original1.png");
     image = new QPixmap(":/personajes/imagenes/fondo.png");
+    image2 = new QPixmap(":/personajes/imagenes/Fondo_Original1.png");
+
 }
 
 ///         DESTRUCTOR         ///
@@ -31,17 +32,10 @@ void Escena_Juego::setWindowProperty(int desk_w, int desk_h)
 
 void Escena_Juego::drawBackground(QPainter *painter, const QRectF &exposed)
 {
-    painter->drawPixmap(QRectF(0,0,limit_x,limit_y),*image,image->rect());
+    if(backGround) painter->drawPixmap(QRectF(0,0,limit_x,limit_y),*image,image->rect());
+    else painter->drawPixmap(QRectF(0,0,limit_x,limit_y),*image2,image2->rect());
 }
 
-///         ESTABLECER ESCENA ARCADE         ///
-void Escena_Juego::arcadeDesing()
-{
-    int x_1 = 100, y_1 = 500;
-    int w_1 = 100, h_1 = 100;
-    //QString path_1 = ":/personajes/imagenes/mario.png";
-    //addObjetoGrafico(path_1,x_1,y_1,w_1,h_1);
-}
 
 ///         AÑADIR OBJETOS GRAFICOS         ///
 void Escena_Juego::addObjetoGrafico(QString ruta, int x, int y, int w, int h,bool main)
@@ -72,7 +66,10 @@ void Escena_Juego::addObjetoMovil(QString ruta, int x, int y,int xf,int yf, int 
     objetosMoviles.push_back(muni);     //Añadir objeto a la lista de objetos moviles
 
     /// ASIGNACION DE MOVIMIENTO PARABOLICO
-    if(move == 1) muni->setMovParabolico(xf,yf,param,minMax);   //Calcula velocidad y angulo inicial
+    if(move == 1) {
+        muni->setMovParabolico(xf,yf,param,minMax);
+        muni->setInverseMove();
+    }   //Calcula velocidad y angulo inicial
 
     //qDebug()<<"No hay problemas con la inicializacion del movimiento";
 
@@ -114,6 +111,7 @@ void Escena_Juego::explode(Objeto_Movil *enem)
 //    y=enem->getY()-100;
     y=enem->getY();
     explosiones = new Objeto_Grafico(":/personajes/imagenes/explode.png",x,y,80,80);
+    explosiones->setEscala(1.6);
     this->addItem(explosiones);
     objetosGraficos.push_back(explosiones);
 }
@@ -128,7 +126,7 @@ void Escena_Juego::explodePlusPlus()
                 objetosGraficos.erase(itObjGra);
                 return;
             }
-            else (*itObjGra)->cont++;
+            else {(*itObjGra)->cont++;}
         }
     }
 }
@@ -202,6 +200,10 @@ bool Escena_Juego::deleteFromScene()
                 }
                 return collides;
             }
+            else if((*itObjMov)->getY() > limit_y-200){
+                (*itObjMov)->set_vel((*itObjMov)->get_velX(),-1*e*(*itObjMov)->get_velY(),
+                                     (*itObjMov)->getX(),(*itObjMov)->getY()-10);
+            }
             else{
                 for (itObjMov2 = objetosMoviles.begin(),cont2=0;itObjMov2 != objetosMoviles.end();itObjMov2++,cont2++) {
                     /// Si es bala ///              ///Si es Enemigo///
@@ -247,6 +249,11 @@ void Escena_Juego::setScorePlus()
 vector<Objeto_Movil *> Escena_Juego::getObjetosMoviles() const
 {
     return objetosMoviles;
+}
+
+void Escena_Juego::setBackGround(bool value)
+{
+    backGround = value;
 }
 
 int Escena_Juego::getBlood() const

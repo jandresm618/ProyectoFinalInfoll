@@ -22,7 +22,13 @@ public:
 
     void setMovParabolico(int xf,int yf,int param,bool minMax);
     void setVel(float _v0,float _angle);
+    void set_vel(int vx,int vy,int px,int py);
     void setMovSenoidal();
+    void setMUA();
+
+    float get_velX();
+    float get_velY();
+    void setInverseMove();
 
 
     void startMove(int msec);
@@ -44,6 +50,8 @@ public:
     int getAngle() const;
 
     int getMove() const;
+
+    void setRestitucion(float value);
 
 private:
     Movimiento *movimiento;

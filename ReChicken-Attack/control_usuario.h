@@ -7,6 +7,7 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QMessageBox>
+#include <QPalette>
 #include "mainwindow.h"
 #include "database.h"
 
@@ -26,6 +27,9 @@ public:
     void crearObjetos();
     void hideItems();
     void disconnectAll();
+    void showSavedGames();
+    void showRecords();
+    void exit();
 
     ///DISEÑO DE VENTANA
     void welcomeWindow();
@@ -36,6 +40,7 @@ public:
     void setMatchNameWindow();
     void matchNameWindow();
     void loadGame();
+    void showRecordsWindow();
 
 
     ///Eventos de Teclado
@@ -51,8 +56,11 @@ public:
     void createUser();
     void startGame();
     void loadDataGame();
+    void setBackground1();
+    void setBackground2();
 
     void printVector(vector<QString> vec);
+    void printVectorInTable(vector<QString> vec, QStringList l, int columns);
     void infoBox(QString title, QString text, QString infoText);
 
 
@@ -69,6 +77,8 @@ private:
     QPushButton *boton3;
     QPushButton *boton4;
     QPushButton *boton5;
+    QPushButton *boton6;
+    QPushButton *boton7;
 
     QLabel *label1;
     QLabel *label2;

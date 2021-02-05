@@ -21,7 +21,7 @@ public:
     void crearTabladeUsuarios();
     void crearTabladeDatos();
     void crearTabladeEnemigos();
-    void crearTabladeRecords();
+    void crearTabladeRecords();    
 
     //INSERTAR VALORES A LAS TABLAS
     void insertarUsuario();
@@ -32,14 +32,15 @@ public:
     bool insertarEnemigos(QString match_name, QString username, int x, int y, int v0, int angle, int move);
 
     void insertarRecord();
-    void insertarRecord(QString name, QString high_score);
+    void insertarRecord(QString name, QString high_score, QString player);
 
     //MUESTRA CON QDEBUG LOS DATOS EN LAS TABLAS
 
     void mostrarUsuarios();
     vector<QString> mostrarDatos(QString match_name, QString username);
     vector<QString> mostrarEnemigos(QString match_name, QString username);
-    void mostrarRecord();
+    vector<QString> mostrarRecord();
+    vector<QString> mostrarPartidas(QString username);
 
     //VERIFICA QUE LOS DATOS ESTEN O NO
 
